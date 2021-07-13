@@ -13,5 +13,5 @@ interface MovieClient {
     }
 
     @GET("movies.json")
-    suspend fun movies(): Response<MovieResponse>
+    suspend fun movies(): MovieResponse
 }

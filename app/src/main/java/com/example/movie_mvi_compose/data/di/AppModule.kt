@@ -1,8 +1,7 @@
 package com.example.movie_mvi_compose.data.di
 
-import android.graphics.Movie
 import com.example.movie_mvi_compose.BuildConfig.DEBUG
-import com.example.movie_mvi_compose.data.Api.MovieClient
+import com.example.movie_mvi_compose.data.network.Api.MovieClient
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -14,7 +13,6 @@ import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -43,13 +41,9 @@ object AppModule {
     }
     @Singleton
     @Provides
-    fun provideRetrofit(client: Lazy<OkHttpClient>): Retrofit {
-        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("")
-            .callFactory(object : Call.Factory{
-                // this bellow fun ,called in background thread
-                override fun newCall(request: Request): Call =
-                    client.get().newCall(request)
-            })
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("https://raw.githubusercontent.com/android10/Sample-Data/master/Android-CleanArchitecture-Kotlin/")
+
             .build()
 
     }

@@ -1,9 +1,11 @@
 package com.example.movie_mvi_compose.data.network.Api
 
+import com.example.movie_mvi_compose.data.network.response.MovieDetials
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface MovieClient {
     companion object {
@@ -12,6 +14,10 @@ interface MovieClient {
         private const val MOVIE_DETAILS = "movie_0{$PARAM_MOVIE_ID}.json"
     }
 
-    @GET("movies.json")
+    @GET(MOVIES)
     suspend fun movies(): MovieResponse
+
+    @GET(MOVIE_DETAILS)
+    suspend fun movieDetails(@Path(PARAM_MOVIE_ID) movieId: Int):  MovieDetials
+
 }

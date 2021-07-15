@@ -42,8 +42,9 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl("https://raw.githubusercontent.com/android10/Sample-Data/master/Android-CleanArchitecture-Kotlin/")
-
+        return Retrofit.Builder().
+        addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://raw.githubusercontent.com/android10/Sample-Data/master/Android-CleanArchitecture-Kotlin/")
             .build()
 
     }

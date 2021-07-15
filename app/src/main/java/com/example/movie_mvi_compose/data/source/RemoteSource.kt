@@ -9,13 +9,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class RemoteSource @Inject constructor(var api:MovieClient) {
+   suspend fun remoteAllMovie() = api.movies()
 
-   suspend fun remoteAllMovie(): Resource<MovieResponse> {
-      val response = try {
-         api.movies()
-      } catch(e: Exception) {
-         return Resource.Error("An unknown error occured.")
-      }
-      return Resource.Success(response)
-   }
+
+   suspend fun remoteDetailsMovie(id:Int)= api.movieDetails(id)
 }

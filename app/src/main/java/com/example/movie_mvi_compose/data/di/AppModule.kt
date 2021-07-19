@@ -1,11 +1,16 @@
 package com.example.movie_mvi_compose.data.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.movie_mvi_compose.BuildConfig.DEBUG
+import com.example.movie_mvi_compose.data.db.MovieDao
+import com.example.movie_mvi_compose.data.db.MyDataBase
 import com.example.movie_mvi_compose.data.network.Api.MovieClient
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Call
 import okhttp3.OkHttpClient
@@ -52,6 +57,33 @@ object AppModule {
      fun provideMovieApi(retrofit: Retrofit):MovieClient{
          return retrofit.create(MovieClient::class.java)
      }
+
+
+
+    @Singleton
+    @Provides
+    fun provideMyDb(
+        @ApplicationContext context: Context,
+    ): MyDataBase {
+      //  , callback: MyDataBase.Callback
+        return Room
+            .databaseBuilder(
+                context,
+                MyDataBase::class.java,
+                "DATABASE_NAME"
+            )
+            .fallbackToDestructiveMigration()
+
+//            .addCallback(callback)
+
+            .build()
+    }
+
+
+    @Provides
+    fun provideMyDAO(myDataBase: MyDataBase): MovieDao {
+        return myDataBase.getMyDao()
+    }
 
 
 

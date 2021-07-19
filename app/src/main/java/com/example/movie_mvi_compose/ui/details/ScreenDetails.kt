@@ -1,45 +1,110 @@
 package com.example.movie_mvi_compose.ui.details
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.movie_mvi_compose.ui.movie.MovieViewModel
-import com.example.movie_mvi_compose.ui.movie.NetworkImage
-import com.google.accompanist.coil.rememberCoilPainter
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
+import kotlin.coroutines.CoroutineContext
 
 
 @Composable
-fun DetailsMovie(ur:String){
-    val context =  LocalContext.current
+fun DetailsMovie(id: String) {
     val viewModel = hiltViewModel<DetailsViewModel>()
-    val details = viewModel.state.collectAsState().value
+    val details by viewModel.state.collectAsState()
+    viewModel.showDetails(id.toInt())
+
+
+
+
+
+
+
+
+
+    details.let { details->
+        when(details){
+            is DetailsViewModel.NewStatus.CheckMessage ->{
+                BackGroundImage(uri = details.message.poster!!)
+            }
+        }
+
+    }
+
+
+
+
+
+
+    Hover()
+//    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+//
+//        val (title,summery) = createRefs()
+//
+//        Text(
+//            "${details.title}", color = Color(0xA3F3F1F1),
+//            modifier = Modifier.constrainAs(title) {
+//                top.linkTo(parent.top, margin = 15.dp)
+//                end.linkTo(parent.end)
+//                start.linkTo(parent.start)
+//            },
+//        )
+//        Text(text =  "${details.summary}", color = Color(0xA3F3F1F1),
+//            modifier = Modifier.constrainAs(summery) {
+//                top.linkTo(title.bottom, margin = 7.dp)
+//                end.linkTo(parent.end,margin = 7.dp)
+//                start.linkTo(parent.start,margin = 10.dp)
+//            },)
+//
+//    }
+
+
+}
+
+@Composable
+fun Hover() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xBF020202))
+    ) {}
+}
+
+@Composable
+fun BackGroundImage(uri: String) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Image(
+        CoilImage(
+            imageModel = uri,
             modifier = Modifier
-                .height(400.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop,
-            painter = rememberCoilPainter(request = "https://raw.githubusercontent.com/android10/Sample-Data/master/Android-CleanArchitecture-Kotlin/posters/${ur}.jpg"),
-            contentDescription = null
+            circularRevealedDuration = 450,
+            shimmerParams = ShimmerParams(
+                baseColor = MaterialTheme.colors.background,
+                highlightColor = Color(0xA3C2C2C2),
+                dropOff = 0.65f
+            ),
+            failure = {
+                Text(
+                    text = "image request failed.",
+                    style = MaterialTheme.typography.body2
+                )
+            }
         )
+
     }
-   
+
+
 }
 

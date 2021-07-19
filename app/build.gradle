@@ -86,7 +86,7 @@ dependencies {
     // Coroutine Lifecycle Scopes
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
-
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "com.google.accompanist:accompanist-coil:0.12.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"

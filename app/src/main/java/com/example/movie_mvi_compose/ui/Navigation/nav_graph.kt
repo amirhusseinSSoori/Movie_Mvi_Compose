@@ -15,18 +15,14 @@ import com.example.movie_mvi_compose.ui.movie.MovieLazyList
 @Composable
 fun InitialNavGraph(){
     val navController: NavHostController = rememberNavController()
-    NavHost(navController = navController, startDestination = "screenOne") {
-        val details=
+    NavHost(navController = navController, startDestination = "ScreenMovie") {
+       
 
-        composable("screenOne") {
-            MovieLazyList ( navigation = {
-                navController.navigate("screenTwo/038029"){}
-            })
-
+        composable("ScreenMovie") {
+            MovieLazyList (navController)
         }
-        composable("screenTwo/{userId}", arguments = listOf(navArgument("userId") { type = NavType.StringType })) {
-            DetailsMovie ( "${it.arguments?.get("userId")}")
+        composable("ScreenDetails/{details}", arguments = listOf(navArgument("details") { type = NavType.StringType })) {
+            DetailsMovie ( "${it.arguments?.get("details")}")
         }
-
     }
 }

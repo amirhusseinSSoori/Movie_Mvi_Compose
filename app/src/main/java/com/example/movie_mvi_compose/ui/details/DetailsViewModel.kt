@@ -15,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) : ViewModel() {
 
-    var mutebale = MutableStateFlow(MovieDetials())
-    var state: StateFlow<MovieDetials> = mutebale
+    var mutebale = MutableStateFlow<NewStatus>(NewStatus.Empty)
+    var state: StateFlow<NewStatus> = mutebale
 
 
     fun showDetails(id:Int){
@@ -25,17 +25,23 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
                 repository.getDetailsMovie(id)
 
             }.onSuccess {
-
-                mutebale.value = it
+                mutebale.value = NewStatus.CheckMessage(it)
             }.onFailure {
-                Log.e("handelError", "onFailure: ${it.message}", )
+                Log.e("handelErrorDetails", "onFailure: ${it.message}", )
 
             }.recover {
-                Log.e("handelError", "onRecover: ${it.message}", )
+                Log.e("handelErrorDetails", "onRecover: ${it.message}", )
 
                 return@recover  "STATUS_UNKNOWN"
             }
 
         }
+    }
+
+
+    sealed class NewStatus(){
+        object Empty : NewStatus()
+        class  CheckMessage(var message: MovieDetials) : NewStatus()
+
     }
 }

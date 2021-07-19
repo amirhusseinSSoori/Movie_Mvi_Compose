@@ -1,6 +1,7 @@
 package com.example.movie_mvi_compose.ui.movie
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -28,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.movie_mvi_compose.data.network.response.MovieItem
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import com.google.accompanist.coil.rememberCoilPainter
@@ -36,19 +38,18 @@ import com.skydoves.landscapist.coil.CoilImage
 
 
 @Composable
-fun MovieRowItem(uri: String,context: Context,navigation: () -> Unit) {
+fun MovieRowItem(uri: String,navHost: NavHostController,id:String) {
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)
             .clickable {
-                Toast.makeText(context,uri,Toast.LENGTH_SHORT).show()
-                navigation()
+                navHost.navigate("ScreenDetails/$id")
             }
     ) {
         NetworkImage(url = uri,
-            modifier =Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(10.dp)))
     }
@@ -62,7 +63,7 @@ fun BtnRetry(UiUpdatePoorConnection:MovieViewModel){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { UiUpdatePoorConnection.showAllMovie() }) {
+        Button(onClick = { UiUpdatePoorConnection.setEvent(MovieContract.Event.ShowMovie)}) {
             Text(text = "Retry")
         }
 
@@ -73,19 +74,34 @@ fun BtnRetry(UiUpdatePoorConnection:MovieViewModel){
 
 @ExperimentalFoundationApi
 @Composable
-fun MovieLazyList(navigation:() -> Unit) {
-    val context =  LocalContext.current
+fun MovieLazyList(navHost: NavHostController) {
     val viewModel = hiltViewModel<MovieViewModel>()
-    val list = viewModel.state.collectAsState().value
-    val error by remember { viewModel.handelError }
+    val data by viewModel.uiState.collectAsState()
+    val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
+    viewModel.setEvent(MovieContract.Event.ShowMovie)
     LazyVerticalGrid(cells = GridCells.Fixed(4)) {
-        items(list.size) { data ->
-            MovieRowItem(list[data].poster,context,navigation)
-        }
+            data.let {
+                when(it.state){
+                    is  MovieContract.MovieState.Success ->{
+                        items(it.state.Movie.size) { data ->
+                            val (id,poster) = it.state.Movie[data]
+                            MovieRowItem(poster!!,navHost,id!!)
+                        }
+                    }
+                    is MovieContract.MovieState.Idle -> {}
+                    else -> Unit
+                }
+
+         }
+
     }
-    viewModel.showAllMovie()
-    if(error == "Failure"){
-        BtnRetry(viewModel)
+    effect.let {  effect ->
+        when(effect){
+            is MovieContract.Effect.ShowError ->{
+                BtnRetry(viewModel)
+            }
+        }
+
     }
 }
 @Composable

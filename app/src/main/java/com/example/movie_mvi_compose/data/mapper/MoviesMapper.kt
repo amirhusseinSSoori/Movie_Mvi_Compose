@@ -8,7 +8,7 @@ import com.example.movie_mvi_compose.data.network.response.MovieItem
 
 import javax.inject.Inject
 
-class CheckStatusMapper @Inject constructor() : EntityMapper<MovieItem, MovieEntity> {
+class MoviesMapper @Inject constructor() : EntityMapper<MovieItem, MovieEntity> {
 
     override fun mapFromEntity(entity: MovieItem): MovieEntity {
         return MovieEntity(

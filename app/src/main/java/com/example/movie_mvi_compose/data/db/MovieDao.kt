@@ -16,5 +16,5 @@ interface MovieDao {
 
 
     @Query("DELETE FROM MovieEntity")
-    suspend fun deleteAllRestaurants()
+    suspend fun deleteAllMovies()
 }

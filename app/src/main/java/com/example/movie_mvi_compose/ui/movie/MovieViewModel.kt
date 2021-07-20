@@ -1,10 +1,9 @@
 package com.example.movie_mvi_compose.ui.movie
 
 import androidx.lifecycle.viewModelScope
-import com.example.movie_mvi_compose.data.repository.MovieRepositoryIml
+import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryIml
 import com.example.movie_mvi_compose.ui.base.BaseViewModel
 import com.example.movie_mvi_compose.ui.base.Resource
-import com.example.movie_mvi_compose.ui.details.DetailsContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -29,22 +28,28 @@ class MovieViewModel @Inject constructor(var repository: MovieRepositoryIml) :
         }
     }
 
-    private  fun detailsOfMovies() {
+    private fun detailsOfMovies() {
         viewModelScope.launch {
-            repository.getRestaurants().collect {
-                when(it){
-                   is  Resource.Success -> {
-                       setState { copy(state = MovieContract.MovieState.Movie(list = it.data!!)) }
-                   }
+            repository.getAllMovie().collect {
+                when (it) {
+                    is Resource.Success -> {
+                        setState { copy(state = MovieContract.MovieState.Movie(list = it)) }
+                    }
                     is Resource.Error -> {
-                        setState { copy(state = MovieContract.MovieState.Movie(list = it.data!!)) }
-                        setEffect { MovieContract.Effect.ShowError(it.error!!.message!!,list = it.data!!) }
+                        setState { copy(state = MovieContract.MovieState.Movie(list = it)) }
+                        setEffect {
+                            MovieContract.Effect.ShowError(
+                                it.error!!.message!!,
+                                list = it.data!!
+                            )
+                        }
                     }
                     else -> Unit
                 }
             }
 
-
         }
+
+
     }
 }

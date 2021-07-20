@@ -1,4 +1,4 @@
-package com.example.movie_mvi_compose.data.repository
+package com.example.movie_mvi_compose.data.repository.movie
 
 import com.example.movie_mvi_compose.data.db.entity.MovieEntity
 import com.example.movie_mvi_compose.data.network.response.MovieDetials
@@ -12,7 +12,7 @@ interface MovieRepository {
     suspend fun getDetailsMovie(id:Int):MovieDetials
     //dataBase
 
-     fun getAllMovie(): Flow<List<MovieEntity>>
+//    suspend fun getAllMovie():Flow<Any>
 
 
 }

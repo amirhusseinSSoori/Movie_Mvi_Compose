@@ -1,16 +1,10 @@
 package com.example.movie_mvi_compose.ui.details
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movie_mvi_compose.data.network.response.MovieDetials
-import com.example.movie_mvi_compose.data.network.response.MovieResponse
-import com.example.movie_mvi_compose.data.repository.MovieRepositoryIml
+import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryIml
 import com.example.movie_mvi_compose.ui.base.BaseViewModel
-import com.example.movie_mvi_compose.ui.movie.MovieContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

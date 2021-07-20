@@ -6,7 +6,5 @@ import javax.inject.Inject
 
 class RemoteSource @Inject constructor(var api:MovieClient) {
    suspend fun remoteAllMovie() = api.movies()
-
-
    suspend fun remoteDetailsMovie(id:Int)= api.movieDetails(id)
 }

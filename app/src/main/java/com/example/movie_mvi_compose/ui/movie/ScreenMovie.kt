@@ -32,13 +32,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.movie_mvi_compose.data.network.response.MovieItem
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
+import com.example.movie_mvi_compose.ui.base.Resource
 import com.google.accompanist.coil.rememberCoilPainter
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
 
 
 @Composable
-fun MovieRowItem(uri: String,navHost: NavHostController,id:String) {
+fun MovieRowItem(uri: String, navHost: NavHostController, id: String) {
 
     Column(
         modifier = Modifier
@@ -48,22 +49,24 @@ fun MovieRowItem(uri: String,navHost: NavHostController,id:String) {
                 navHost.navigate("ScreenDetails/$id")
             }
     ) {
-        NetworkImage(url = uri,
+        NetworkImage(
+            url = uri,
             modifier = Modifier
                 .fillMaxSize()
-                .clip(RoundedCornerShape(10.dp)))
+                .clip(RoundedCornerShape(10.dp))
+        )
     }
 }
 
 
 @Composable
-fun BtnRetry(UiUpdatePoorConnection:MovieViewModel){
+fun BtnRetry(UiUpdatePoorConnection: MovieViewModel) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { UiUpdatePoorConnection.setEvent(MovieContract.Event.ShowMovie)}) {
+        Button(onClick = { UiUpdatePoorConnection.setEvent(MovieContract.Event.ShowMovie) }) {
             Text(text = "Retry")
         }
 
@@ -71,39 +74,47 @@ fun BtnRetry(UiUpdatePoorConnection:MovieViewModel){
 }
 
 
-
 @ExperimentalFoundationApi
 @Composable
-fun MovieLazyList(navHost: NavHostController) {
-    val viewModel = hiltViewModel<MovieViewModel>()
+fun MovieLazyList(navHost: NavHostController, viewModel: MovieViewModel) {
     val data by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
-    viewModel.setEvent(MovieContract.Event.ShowMovie)
+
+
+
+
     LazyVerticalGrid(cells = GridCells.Fixed(4)) {
-            data.let {
-                when(it.state){
-                    is  MovieContract.MovieState.Success ->{
-                        items(it.state.Movie.size) { data ->
-                            val (id,poster) = it.state.Movie[data]
-                            MovieRowItem(poster!!,navHost,id!!)
-                        }
+        data.let {
+            when (it.state) {
+                is MovieContract.MovieState.Movie -> {
+                    items(it.state.list.size) { data ->
+                        val (id, poster) = it.state.list!![data]
+                        MovieRowItem(poster!!, navHost, id!!)
                     }
-                    is MovieContract.MovieState.Idle -> {}
-                    else -> Unit
+
                 }
-
-         }
-
-    }
-    effect.let {  effect ->
-        when(effect){
-            is MovieContract.Effect.ShowError ->{
-                BtnRetry(viewModel)
+                is MovieContract.MovieState.Idle -> {}
+                else -> Unit
             }
-        }
 
+        }
+        effect.let { effect ->
+            when (effect) {
+                is MovieContract.Effect.ShowError -> {
+                    // BtnRetry(viewModel)
+                    items(effect.list.size) { data ->
+                        val (id, poster) = effect.list!![data]
+                        MovieRowItem(poster!!, navHost, id!!)
+                    }
+
+                }
+            }
+
+        }
     }
+
 }
+
 @Composable
 fun NetworkImage(
     url: String,

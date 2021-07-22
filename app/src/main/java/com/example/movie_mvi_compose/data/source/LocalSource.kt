@@ -8,4 +8,6 @@ class LocalSource @Inject constructor(val db: MovieDao) {
     suspend fun insertMovie(details: List<MovieEntity>) = db.insertDetails(details)
     fun allMovie() = db.getAllMovie()
     suspend fun delete() = db.deleteAllMovies()
+
+
 }

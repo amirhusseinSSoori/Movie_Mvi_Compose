@@ -1,5 +1,6 @@
 package com.example.movie_mvi_compose.ui.details
 
+
 import com.example.movie_mvi_compose.data.network.response.MovieDetials
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import com.example.movie_mvi_compose.ui.base.UiEffect

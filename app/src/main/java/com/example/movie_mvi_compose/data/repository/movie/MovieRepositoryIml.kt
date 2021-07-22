@@ -5,7 +5,6 @@ import com.example.movie_mvi_compose.ui.base.networkBoundResource
 import com.example.movie_mvi_compose.data.db.MyDataBase
 import com.example.movie_mvi_compose.data.mapper.MoviesMapper
 import com.example.movie_mvi_compose.data.network.response.MovieDetials
-import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.data.source.LocalSource
 import com.example.movie_mvi_compose.data.source.RemoteSource
 import kotlinx.coroutines.delay

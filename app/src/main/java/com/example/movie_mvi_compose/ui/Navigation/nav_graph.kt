@@ -1,8 +1,10 @@
 package com.example.movie_mvi_compose.ui.Navigation
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -26,7 +28,6 @@ fun InitialNavGraph() {
 
     val navController: NavHostController = rememberNavController()
     val scope = rememberCoroutineScope()
-
     NavHost(navController = navController, startDestination = NavScreen.Intro.route) {
 
         composable(NavScreen.Intro.route) {
@@ -35,7 +36,7 @@ fun InitialNavGraph() {
                 delay(5000)
                 navController.navigate(NavScreen.Movie.route) {
                     popUpTo(NavScreen.Intro.route)
-                    popUpTo("ScreenIntro") { inclusive = true }
+                    popUpTo(NavScreen.Intro.route) { inclusive = true }
                 }
             }
 
@@ -53,7 +54,7 @@ fun InitialNavGraph() {
 
 
         composable(
-            NavScreen.Details.route,
+            routeWithArgument,
             arguments = listOf(navArgument(argument0) { type = NavType.StringType })
         ) {
             DetailsMovie("${it.arguments?.get(argument0)}")

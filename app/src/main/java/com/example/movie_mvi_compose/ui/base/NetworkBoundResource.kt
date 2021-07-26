@@ -1,28 +1,32 @@
 package com.example.movie_mvi_compose.ui.base
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
-
+import kotlinx.coroutines.launch
 
 inline fun <ResultType, RequestType> networkBoundResource(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true }
-) = flow {
+) = channelFlow {
     val data = query().first()
 
-    val flow = if (shouldFetch(data)) {
-        emit(Resource.Loading(data))
+    if (shouldFetch(data)) {
+        val loading = launch {
+            query().collect { send(Resource.Loading(it)) }
+        }
 
         try {
+            delay(2000)
             saveFetchResult(fetch())
-            query().map { Resource.Success(it) }
-        } catch (throwable: Throwable) {
-            query().map { Resource.Error(throwable, it) }
+            loading.cancel()
+            query().collect { send(Resource.Success(it)) }
+        } catch (t: Throwable) {
+            loading.cancel()
+            query().collect { send(Resource.Error(t, it)) }
         }
     } else {
-        query().map { Resource.Success(it) }
+        query().collect { send(Resource.Success(it)) }
     }
-
-    emitAll(flow)
 }

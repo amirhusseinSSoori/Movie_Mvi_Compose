@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +24,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.movie_mvi_compose.R
 import com.example.movie_mvi_compose.ui.theme.black
+import com.example.movie_mvi_compose.ui.theme.white
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
 
@@ -68,24 +75,28 @@ fun BtnRetry(UiUpdatePoorConnection: MovieViewModel) {
 fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
     val data by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
+    var visible by remember { mutableStateOf(true) }
 
+    ConstraintLayout(
+        modifier = Modifier
+            .background(black)
+            .fillMaxSize()
+    ) {
 
-    ConstraintLayout(modifier = Modifier
-        .background(black)
-        .fillMaxSize()) {
+        Loading(visible = visible)
         LazyVerticalGrid(cells = GridCells.Fixed(4)) {
             data.let {
                 when (it.state) {
                     is MovieContract.MovieState.Movie -> {
+                        visible = false
                         items(it.state.list.data!!.size) { data ->
                             val (id, poster) = it.state.list.data!![data]
                             MovieRowItem(
                                 poster!!,
                                 navigateToDetailsScreen, id!!
                             )
+
                         }
-                    }
-                    is MovieContract.MovieState.Idle -> {
                     }
                     else -> Unit
                 }
@@ -96,6 +107,7 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
         effect.let { effect ->
             when (effect) {
                 is MovieContract.Effect.ShowError -> {
+                    visible = false
                     BtnRetry(viewModel)
 
                 }
@@ -103,6 +115,22 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
 
         }
 
+    }
+
+
+}
+
+@Composable
+fun Loading(visible: Boolean) {
+    if (visible) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator(color = white)
+        }
     }
 
 

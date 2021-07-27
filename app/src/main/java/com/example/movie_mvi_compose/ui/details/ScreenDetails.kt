@@ -23,6 +23,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movie_mvi_compose.R
+import com.example.movie_mvi_compose.ui.base.Loader
 import com.example.movie_mvi_compose.ui.movie.MovieContract
 import com.example.movie_mvi_compose.ui.theme.black
 import com.skydoves.landscapist.ShimmerParams
@@ -61,8 +62,7 @@ fun DetailsMovie(id: String) {
         effect.let { effect ->
             when (effect) {
                 is DetailsContract.Effect.ShowError -> {
-                    Loader()
-                    //Toast.makeText(LocalContext.current, effect.message, Toast.LENGTH_SHORT).show()
+                    ErrorConnection()
                 }
             }
         }
@@ -72,14 +72,18 @@ fun DetailsMovie(id: String) {
 }
 
 @Composable
-fun Loader() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.poor))
-    val progress by animateLottieCompositionAsState(composition)
-    LottieAnimation(
-        composition,
-        progress,
-    )
+fun ErrorConnection(){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(black), horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Loader(R.raw.poor)
+    }
+
 }
+
 
 @Composable
 fun ScreenDetails(url: String, title: String, cast: String, director: String, year: String) {
@@ -97,7 +101,7 @@ fun MovieDescription(dsTitle: String, dsCast: String, dsDirector: String, dsYear
             .fillMaxSize()
             .verticalScroll(scroll)
     ) {
-        val (title, topicCast, cast, topicDirector, director,topicYearDirector) = createRefs()
+        val (title, topicCast, cast, topicDirector, director, topicYearDirector) = createRefs()
 
 
         //  Title
@@ -157,13 +161,14 @@ fun MovieDescription(dsTitle: String, dsCast: String, dsDirector: String, dsYear
 
         Row(
             modifier = Modifier
-                .fillMaxWidth().constrainAs(topicYearDirector){
+                .fillMaxWidth()
+                .constrainAs(topicYearDirector) {
                     top.linkTo(cast.bottom, margin = 5.dp)
                     start.linkTo(parent.start, margin = 15.dp)
                 }
         ) {
-            Text(text = "cast ",color = Color(0x73F8F6F6))
-            Text(text = "Year ",color = Color(0x73F8F6F6))
+            Text(text = "cast ", color = Color(0x73F8F6F6))
+            Text(text = "Year ", color = Color(0x73F8F6F6))
         }
 
         Row(

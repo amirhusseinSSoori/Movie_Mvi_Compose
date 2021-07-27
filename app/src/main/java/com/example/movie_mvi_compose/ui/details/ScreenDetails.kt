@@ -18,6 +18,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.movie_mvi_compose.R
 import com.example.movie_mvi_compose.ui.movie.MovieContract
 import com.example.movie_mvi_compose.ui.theme.black
 import com.skydoves.landscapist.ShimmerParams
@@ -56,13 +61,24 @@ fun DetailsMovie(id: String) {
         effect.let { effect ->
             when (effect) {
                 is DetailsContract.Effect.ShowError -> {
-                    Toast.makeText(LocalContext.current, effect.message, Toast.LENGTH_SHORT).show()
+                    Loader()
+                    //Toast.makeText(LocalContext.current, effect.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
     }
 
+}
+
+@Composable
+fun Loader() {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.poor))
+    val progress by animateLottieCompositionAsState(composition)
+    LottieAnimation(
+        composition,
+        progress,
+    )
 }
 
 @Composable

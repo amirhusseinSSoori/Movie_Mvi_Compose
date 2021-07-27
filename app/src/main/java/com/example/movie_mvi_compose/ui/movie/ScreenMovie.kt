@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.movie_mvi_compose.ui.theme.black
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
@@ -69,7 +70,7 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
 
 
-    Column(modifier = Modifier
+    ConstraintLayout(modifier = Modifier
         .background(black)
         .fillMaxSize()) {
         LazyVerticalGrid(cells = GridCells.Fixed(4)) {
@@ -101,6 +102,7 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
             }
 
         }
+
     }
 
 

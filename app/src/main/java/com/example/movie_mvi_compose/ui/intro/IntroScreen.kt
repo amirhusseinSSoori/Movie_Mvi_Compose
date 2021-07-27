@@ -8,10 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.movie_mvi_compose.R
 import com.example.movie_mvi_compose.ui.theme.black
 import com.example.movie_mvi_compose.ui.theme.white
 
@@ -24,7 +30,21 @@ fun Splash() {
             .background(black), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Mvi Movie",style = TextStyle(color = white))
+
+  
+        Loader()
     }
 
+}
+
+
+
+@Composable
+fun Loader() {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.cinema))
+    val progress by animateLottieCompositionAsState(composition)
+    LottieAnimation(
+        composition,
+        progress,
+    )
 }

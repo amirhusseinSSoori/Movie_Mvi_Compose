@@ -2,6 +2,7 @@ object Version {
 
     //----------------- main --------------------------------
     val kotlin_version = "1.5.10"
+    val gradle_Version="7.1.0-alpha03"
     val core_ktx_version = "1.6.0"
     val appcompat_version = "1.3.1"
     val material_version = "1.4.0"
@@ -41,4 +42,7 @@ object Version {
     val coil_landscapist="1.2.4"
     //---------------------------------------- util --------------------------------------
     val lotti="1.0.0-rc02-1"
+
+
+
 }

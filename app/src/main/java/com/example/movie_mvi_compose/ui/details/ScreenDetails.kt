@@ -1,8 +1,12 @@
 package com.example.movie_mvi_compose.ui.details
 
 
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,18 +35,22 @@ import com.example.movie_mvi_compose.R
 import com.example.movie_mvi_compose.ui.base.Loader
 import com.example.movie_mvi_compose.ui.base.utilFont
 import com.example.movie_mvi_compose.ui.movie.MovieContract
+import com.example.movie_mvi_compose.ui.movie.MovieViewModel
 import com.example.movie_mvi_compose.ui.theme.black
+import com.example.movie_mvi_compose.ui.theme.white
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
 
 
+@ExperimentalAnimationApi
 @Composable
 fun DetailsMovie(id: String) {
     val viewModel = hiltViewModel<DetailsViewModel>()
     val details by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
+    var visible by remember { mutableStateOf(true) }
 
-    viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt()))
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -52,6 +61,9 @@ fun DetailsMovie(id: String) {
             when (details.state) {
                 is DetailsContract.DetailsState.Success -> {
                     val info = details.state.details
+                    visible = false
+
+                    Log.e("visible", "DetailsMovie: ", )
                     ScreenDetails(
                         info.poster!!,
                         info.title!!,
@@ -61,6 +73,7 @@ fun DetailsMovie(id: String) {
                         info.summary!!
                     )
                 }
+                else ->Unit
             }
 
         }
@@ -68,25 +81,38 @@ fun DetailsMovie(id: String) {
         effect.let { effect ->
             when (effect) {
                 is DetailsContract.Effect.ShowError -> {
-                    ErrorConnection()
+                    ErrorConnection(updateUi = {
+                        viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt()))
+                    },visible)
                 }
             }
         }
+
 
     }
 
 }
 
+@ExperimentalAnimationApi
 @Composable
-fun ErrorConnection() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(black), horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Loader(R.raw.poor)
+fun ErrorConnection(updateUi : () ->Unit ,visible:Boolean) {
+    AnimatedVisibility(visible = visible) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(black), horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+
+        ) {
+            Loader(R.raw.poor)
+            Text(text = stringResource(id =R.string.error_connection ),modifier = Modifier.clickable {
+                updateUi()
+
+            },color = white)
+        }
     }
+
+
 
 }
 
@@ -146,7 +172,7 @@ fun MovieDescription(
 
         // Cast
         Text(
-            text = "cast", color = Color(0xA3F3F1F1), modifier = Modifier
+            text = stringResource(id =R.string.cast), color = Color(0xA3F3F1F1), modifier = Modifier
                 .constrainAs(topicCast) {
                     top.linkTo(title.bottom, margin = 5.dp)
                     start.linkTo(parent.start)
@@ -190,11 +216,11 @@ fun MovieDescription(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "director ", color = Color(0x73F8F6F6), fontFamily = utilFont,
+                text = stringResource(id = R.string.director), color = Color(0x73F8F6F6), fontFamily = utilFont,
                 fontWeight = FontWeight.Normal
             )
             Text(
-                text = "Year ", color = Color(0x73F8F6F6), fontFamily = utilFont,
+                text = stringResource(id = R.string.Year), color = Color(0x73F8F6F6), fontFamily = utilFont,
                 fontWeight = FontWeight.Normal
             )
         }
@@ -241,7 +267,7 @@ fun MovieDescription(
         }
         // Summery
         Text(
-            text = "summery",
+            text = stringResource(id = R.string.summery),
             color = Color(0xA3F3F1F1),
             modifier = Modifier
                 .constrainAs(topicSummery) {

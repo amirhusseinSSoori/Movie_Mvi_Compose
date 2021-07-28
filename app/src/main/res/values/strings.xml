@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Movie_Mvi_Compose</string>
+    <string name="error_connection"> مشکلی به وجود آمده </string>
+    <string name="intro">Movie Mvi</string>
+    <string name="cast">cast</string>
+    <string name="director">director</string>
+    <string name="Year">year</string>
+    <string name="summery">summery</string>
+    <string name="problem">Have Problem</string>
 </resources>

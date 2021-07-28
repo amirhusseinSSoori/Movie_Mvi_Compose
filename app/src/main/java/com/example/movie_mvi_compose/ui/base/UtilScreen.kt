@@ -1,5 +1,6 @@
 package com.example.movie_mvi_compose.ui.base
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -49,3 +50,4 @@ val utilFont = FontFamily(
     Font(R.font.montserrat_regular, FontWeight.Medium),
     Font(R.font.montserrat_semibold, FontWeight.Bold)
 )
+

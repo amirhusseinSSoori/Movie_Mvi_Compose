@@ -1,6 +1,7 @@
 package com.example.movie_mvi_compose.ui.Navigation
 
 import android.widget.Toast
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -14,7 +15,9 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.movie_mvi_compose.ui.Navigation.NavScreen.Details.argument0
 import com.example.movie_mvi_compose.ui.Navigation.NavScreen.Details.routeWithArgument
+import com.example.movie_mvi_compose.ui.details.DetailsContract
 import com.example.movie_mvi_compose.ui.details.DetailsMovie
+import com.example.movie_mvi_compose.ui.details.DetailsViewModel
 import com.example.movie_mvi_compose.ui.intro.Splash
 import com.example.movie_mvi_compose.ui.movie.MovieContract
 import com.example.movie_mvi_compose.ui.movie.MovieLazyList
@@ -22,6 +25,7 @@ import com.example.movie_mvi_compose.ui.movie.MovieViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
 fun InitialNavGraph() {
@@ -34,6 +38,7 @@ fun InitialNavGraph() {
             Splash()
             scope.launch {
                 delay(5000)
+
                 navController.navigate(NavScreen.Movie.route) {
                     popUpTo(NavScreen.Intro.route)
                     popUpTo(NavScreen.Intro.route) { inclusive = true }
@@ -57,6 +62,8 @@ fun InitialNavGraph() {
             routeWithArgument,
             arguments = listOf(navArgument(argument0) { type = NavType.StringType })
         ) {
+            val viewModel = hiltViewModel<DetailsViewModel>(it)
+            viewModel.setEvent(DetailsContract.Event.ShowDetails("${it.arguments?.get(argument0)}".toInt()))
             DetailsMovie("${it.arguments?.get(argument0)}")
         }
     }

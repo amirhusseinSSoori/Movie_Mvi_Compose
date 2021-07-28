@@ -1,6 +1,9 @@
 package com.example.movie_mvi_compose.ui.movie
 
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,6 +25,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.airbnb.lottie.compose.LottieAnimation
@@ -55,28 +59,37 @@ fun MovieRowItem(uri: String, navigateToDetailsScreen: (id: String) -> Unit, id:
 }
 
 
+@ExperimentalAnimationApi
 @Composable
-fun BtnRetry(UiUpdatePoorConnection: MovieViewModel) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = { UiUpdatePoorConnection.setEvent(MovieContract.Event.ShowMovie) }) {
-            Text(text = "Retry")
-        }
+fun BtnRetry(UiUpdatePoorConnection: MovieViewModel,error:Boolean) {
+    AnimatedVisibility(visible = error) {
+             Column(
+                 modifier = Modifier.fillMaxSize(),
+                 horizontalAlignment = Alignment.CenterHorizontally,
+                 verticalArrangement = Arrangement.Center
+             ) {
+                 Button(onClick = { UiUpdatePoorConnection.setEvent(MovieContract.Event.ShowMovie) }) {
+                     Text(text = "Retry")
+                 }
 
-    }
+             }
+
+
+         }
+
+
 }
 
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
 fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
+    val ctx=LocalContext.current
     val data by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
-
+    var error by  remember { mutableStateOf(true) }
     ConstraintLayout(
         modifier = Modifier
             .background(black)
@@ -97,6 +110,15 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
                             )
 
                         }
+
+
+
+
+
+
+
+
+
                     }
                     else -> Unit
                 }
@@ -104,12 +126,14 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
             }
 
         }
+
         effect.let { effect ->
             when (effect) {
-                is MovieContract.Effect.ShowError -> {
-                    visible = false
-                    BtnRetry(viewModel)
 
+                is MovieContract.Effect.ShowError -> {
+                    if(effect.list.isEmpty()){
+                        BtnRetry(viewModel,error)
+                    }
                 }
             }
 
@@ -156,7 +180,7 @@ fun NetworkImage(
         ),
         failure = {
             Text(
-                text = "image request failed.",
+                text = stringResource(id = R.string.problem),
                 style = MaterialTheme.typography.body2
             )
         }

@@ -101,6 +101,7 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
             data.let {
                 when (it.state) {
                     is MovieContract.MovieState.Movie -> {
+                        it.state.list.data!!.size
                         visible = false
                         items(it.state.list.data!!.size) { data ->
                             val (id, poster) = it.state.list.data!![data]

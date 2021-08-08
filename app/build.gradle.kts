@@ -1,8 +1,8 @@
 plugins {
-    id ("com.android.application")
-    id ("kotlin-android")
-    id ("dagger.hilt.android.plugin")
-    id ("kotlin-kapt")
+    id("com.android.application")
+    id("kotlin-android")
+    id("dagger.hilt.android.plugin")
+    id("kotlin-kapt")
 }
 
 android {
@@ -26,17 +26,17 @@ android {
 
 
         getByName("release") {
-           isMinifyEnabled = false
-           // minifyEnabled false
+            isMinifyEnabled = false
+            // minifyEnabled false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
     compileOptions {
-        sourceCompatibility (JavaVersion.VERSION_1_8)
-        targetCompatibility (JavaVersion.VERSION_1_8)
+        sourceCompatibility(JavaVersion.VERSION_1_8)
+        targetCompatibility(JavaVersion.VERSION_1_8)
     }
     kotlinOptions {
         jvmTarget = ("1.8")
@@ -46,71 +46,70 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion  = ("1.0.0-rc02")
+        kotlinCompilerExtensionVersion = ("1.0.0-rc02")
         kotlinCompilerVersion = ("1.5.10")
     }
-
 
 
 }
 
 dependencies {
     dep.Main.apply {
-        implementation (core_kts)
-        implementation (appcompat)
-        implementation (material)
-        testImplementation (junit)
-        androidTestImplementation (junit_test)
-        androidTestImplementation (espresso)
+        implementation(core_kts)
+        implementation(appcompat)
+        implementation(material)
+        testImplementation(junit)
+        androidTestImplementation(junit_test)
+        androidTestImplementation(espresso)
 
     }
     dep.Compose.apply {
-        implementation (ui)
-        implementation (material)
-        implementation (ui_tooling)
-        implementation (livedata)
-        androidTestImplementation (ui_test)
-        implementation (constraintlayout)
-        implementation (activity)
+        implementation(ui)
+        implementation(material)
+        implementation(ui_tooling)
+        implementation(livedata)
+        androidTestImplementation(ui_test)
+        implementation(constraintlayout)
+        implementation(activity)
     }
     dep.Square.apply {
-        implementation (retrofit)
-        implementation (converter_gson)
-        implementation (okhttp3)
-        implementation (interceptor)
+        implementation(retrofit)
+        implementation(converter_gson)
+        implementation(okhttp3)
+        implementation(interceptor)
     }
     dep.Hilt.apply {
-        implementation (hilt)
-        kapt (dagger_compiler)
-        implementation (viewmodel)
-        implementation (navigation)
-        kapt (hilt_compiler)
+        implementation(hilt)
+        kapt(dagger_compiler)
+        implementation(viewmodel)
+        implementation(navigation)
+        kapt(hilt_compiler)
     }
 
     dep.LifeCycle.apply {
-        implementation (viewmodel)
-        implementation (runtime)
-        implementation (livedata)
+        implementation(viewmodel)
+        implementation(runtime)
+        implementation(livedata)
     }
 
     dep.Room.apply {
-        implementation (runtime)
-        kapt (compiler)
-        implementation (ktx)
+        implementation(runtime)
+        kapt(compiler)
+        implementation(ktx)
     }
     dep.KotlinX.apply {
-        implementation (core)
-        implementation (android)
+        implementation(core)
+        implementation(android)
     }
     dep.Coil.apply {
-        implementation (coil)
-        implementation (landscapist)
+        implementation(coil)
+        implementation(landscapist)
     }
 
     dep.Util.apply {
-        implementation (lotti)
+        implementation(lotti)
     }
-
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.16.0")
 }
 
 kapt {

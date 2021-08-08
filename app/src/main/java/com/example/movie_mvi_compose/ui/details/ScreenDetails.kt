@@ -49,6 +49,7 @@ fun DetailsMovie(id: String) {
     val details by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
+    val ctx= LocalContext.current
 
 
     ConstraintLayout(
@@ -62,8 +63,6 @@ fun DetailsMovie(id: String) {
                 is DetailsContract.DetailsState.Success -> {
                     val info = details.state.details
                     visible = false
-
-                    Log.e("visible", "DetailsMovie: ", )
                     ScreenDetails(
                         info.poster!!,
                         info.title!!,
@@ -83,6 +82,7 @@ fun DetailsMovie(id: String) {
                 is DetailsContract.Effect.ShowError -> {
                     ErrorConnection(updateUi = {
                         viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt()))
+                        Toast.makeText(ctx,"hello",Toast.LENGTH_SHORT).show()
                     },visible)
                 }
             }
@@ -107,6 +107,7 @@ fun ErrorConnection(updateUi : () ->Unit ,visible:Boolean) {
             Loader(R.raw.poor)
             Text(text = stringResource(id =R.string.error_connection ),modifier = Modifier.clickable {
                 updateUi()
+
 
             },color = white)
         }
@@ -311,7 +312,6 @@ fun DetailsBox(des: String) {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-
     }
 }
 

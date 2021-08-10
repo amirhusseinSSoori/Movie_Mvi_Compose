@@ -26,10 +26,10 @@ class MovieRepositoryIml @Inject constructor(
             delay(2000)
             network.remoteAllMovie()
         },
-        saveFetchResult = { restaurants ->
+        saveFetchResult = { data ->
             db.withTransaction {
                 local.delete()
-                local.insertMovie(mapper.mapFromEntityList(restaurants))
+                local.insertMovie(mapper.mapFromEntityList(data))
             }
         }
     )

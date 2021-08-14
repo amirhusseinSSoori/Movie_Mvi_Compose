@@ -10,8 +10,4 @@ interface MovieRepository {
 
     //server
     suspend fun getMovie():MovieResponse
-    suspend fun getDetailsMovie(id:Int):MovieDetials
-
-
-
 }

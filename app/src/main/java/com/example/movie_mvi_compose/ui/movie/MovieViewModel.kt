@@ -3,7 +3,7 @@ package com.example.movie_mvi_compose.ui.movie
 import androidx.lifecycle.viewModelScope
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryIml
 import com.example.movie_mvi_compose.ui.base.BaseViewModel
-import com.example.movie_mvi_compose.ui.base.Resource
+import com.example.movie_mvi_compose.ui.base.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -32,16 +32,12 @@ class MovieViewModel @Inject constructor(var repository: MovieRepositoryIml) :
         viewModelScope.launch {
             repository.getAllMovie().collect {
                 when (it) {
-                    is Resource.Success -> {
-                        setState { copy(state = MovieContract.MovieState.Movie(list = it)) }
+                    is DataState.Data -> {
+                        setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }
                     }
-                    is Resource.Error -> {
-                        setState { copy(state = MovieContract.MovieState.Movie(list = it)) }
-                        setEffect {
-                            MovieContract.Effect.ShowError(
-                                it.error!!.message!!,
-                                list = it.data!!
-                            )
+                    is DataState.DataBase -> {
+                        setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }
+                        setEffect { MovieContract.Effect.ShowError(it.message, list = it.data)
                         }
                     }
                     else -> Unit

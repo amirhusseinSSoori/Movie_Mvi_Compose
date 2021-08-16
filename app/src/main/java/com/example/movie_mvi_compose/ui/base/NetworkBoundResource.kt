@@ -1,9 +1,11 @@
 package com.example.movie_mvi_compose.ui.base
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 inline fun <ResultType, RequestType> networkBoundResource(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
@@ -14,19 +16,19 @@ inline fun <ResultType, RequestType> networkBoundResource(
 
     if (shouldFetch(data)) {
         val loading = launch {
-            query().collect { send(Resource.Loading(it)) }
+            query().collect { send(DataState.Loading(it)) }
         }
-
         try {
             delay(2000)
             saveFetchResult(fetch())
             loading.cancel()
-            query().collect { send(Resource.Success(it)) }
+            query().collect { send(DataState.Data(it)) }
         } catch (t: Throwable) {
             loading.cancel()
-            query().collect { send(Resource.Error(t, it)) }
+            query().collect { send(DataState.DataBase(it, t.message!!)) }
+
         }
     } else {
-        query().collect { send(Resource.Success(it)) }
+        query().collect { send(DataState.Data(it)) }
     }
 }

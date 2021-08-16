@@ -26,18 +26,13 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
     }
 
     private fun showDetails(id: Int) {
-        /*     viewModelScope.launch {
-
-
-        }*/
-
         repository.getSummery(id).onEach { data ->
             when (data) {
                 is DataState.Data -> {
                     setState { copy(state = DetailsContract.DetailsState.Success(details = data.data!!)) }
                 }
                 is DataState.Response -> {
-                    if(data.uiComponent is UIComponent.None){
+                    if(data.uiComponent is UIComponent.ErrorConnection){
                         setEffect {
                             DetailsContract.Effect.ShowError((data.uiComponent).message)
                         }

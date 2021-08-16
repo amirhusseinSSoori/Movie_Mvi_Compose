@@ -85,7 +85,6 @@ fun BtnRetry(UiUpdatePoorConnection: MovieViewModel,error:Boolean) {
 @ExperimentalFoundationApi
 @Composable
 fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
-    val ctx=LocalContext.current
     val data by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
@@ -95,31 +94,21 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
             .background(black)
             .fillMaxSize()
     ) {
-
         Loading(visible = visible)
         LazyVerticalGrid(cells = GridCells.Fixed(4)) {
             data.let {
                 when (it.state) {
                     is MovieContract.MovieState.Movie -> {
-                        it.state.list.data!!.size
+                       val items=it.state.list
                         visible = false
-                        items(it.state.list.data!!.size) { data ->
-                            val (id, poster) = it.state.list.data!![data]
+                        items(items.size) { data ->
+                            val (id, poster) = items!![data]
                             MovieRowItem(
                                 poster!!,
                                 navigateToDetailsScreen, id!!
                             )
 
                         }
-
-
-
-
-
-
-
-
-
                     }
                     else -> Unit
                 }
@@ -127,10 +116,8 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
             }
 
         }
-
         effect.let { effect ->
             when (effect) {
-
                 is MovieContract.Effect.ShowError -> {
                     if(effect.list.isEmpty()){
                         BtnRetry(viewModel,error)
@@ -141,8 +128,6 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
         }
 
     }
-
-
 }
 
 @Composable

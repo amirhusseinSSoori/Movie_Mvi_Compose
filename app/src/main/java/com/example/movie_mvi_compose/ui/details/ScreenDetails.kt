@@ -80,10 +80,9 @@ fun DetailsMovie(id: String) {
         effect.let { effect ->
             when (effect) {
                 is DetailsContract.Effect.ShowError -> {
+                    Log.e("ErrorConnection : ", effect.message, )
                     ErrorConnection(updateUi = {
-                        viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt()))
-                        Toast.makeText(ctx,"hello",Toast.LENGTH_SHORT).show()
-                    },visible)
+                        viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt())) },visible)
                 }
             }
         }

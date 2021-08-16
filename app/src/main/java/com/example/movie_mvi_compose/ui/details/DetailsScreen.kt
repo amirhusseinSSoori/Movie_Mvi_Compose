@@ -32,9 +32,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movie_mvi_compose.R
-import com.example.movie_mvi_compose.ui.Navigation.NavScreen
+
 import com.example.movie_mvi_compose.ui.base.Loader
-import com.example.movie_mvi_compose.ui.base.ProgressBarState
 import com.example.movie_mvi_compose.ui.base.utilFont
 import com.example.movie_mvi_compose.ui.movie.MovieContract
 import com.example.movie_mvi_compose.ui.movie.MovieViewModel
@@ -52,14 +51,7 @@ fun DetailsMovie(id: Int,viewModel:DetailsViewModel,onEffect: () -> Unit) {
     val details by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
-    val currentEffect by rememberUpdatedState(onEffect)
-    LaunchedEffect(true) {
-        currentEffect()
-    }
-
-
-
-
+    onEffect()
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -67,12 +59,8 @@ fun DetailsMovie(id: Int,viewModel:DetailsViewModel,onEffect: () -> Unit) {
     ) {
         details.let { details ->
             when (details.state) {
-                is DetailsContract.DetailsState.Loading -> {
-                    Loading(progressBarState = details.state.data)
-                }
                 is DetailsContract.DetailsState.Success -> {
                     visible = false
-
                     details.state.details.apply {
                         ScreenDetails(
                             poster!!,
@@ -132,19 +120,7 @@ fun ErrorConnection(updateUi: () -> Unit, visible: Boolean) {
 
 }
 
-@Composable
-fun Loading(progressBarState: ProgressBarState) {
-    if (progressBarState is ProgressBarState.Loading) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator(color = white)
-        }
-    }
-}
+
 
 @Composable
 fun ScreenDetails(

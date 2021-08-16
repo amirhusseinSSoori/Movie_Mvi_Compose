@@ -19,16 +19,12 @@ class MovieRepositoryIml @Inject constructor(
     var db: MyDataBase
 ) : MovieRepository {
     override suspend fun getMovie() = network.remoteAllMovie()
-
     fun getSummery(id:Int): Flow<DataState<MovieDetials>> = flow {
-        emit(DataState.Progress(ProgressBarState.Loading))
         runCatching {
             network.remoteDetailsMovie(id)
         }.onSuccess {
-            emit(DataState.Progress(ProgressBarState.Idle))
             emit(DataState.Data(it))
         }.onFailure {
-            emit(DataState.Progress(ProgressBarState.Idle))
             emit(
                 DataState.Response<MovieDetials>(
                     uiComponent = UIComponent.ErrorConnection(
@@ -38,9 +34,6 @@ class MovieRepositoryIml @Inject constructor(
             )
         }
     }
-
-
-
     fun getAllMovie() = networkBoundResource(
         query = {
             local.allMovie()

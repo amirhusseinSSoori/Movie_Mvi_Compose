@@ -15,11 +15,6 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor(var repository: MovieRepositoryIml) :
     BaseViewModel<MovieContract.Event, MovieContract.State, MovieContract.Effect>() {
 
-
-    init {
-        detailsOfMovies()
-    }
-
     override fun createInitialState(): MovieContract.State {
         return MovieContract.State(
             MovieContract.MovieState.Idle
@@ -38,10 +33,7 @@ class MovieViewModel @Inject constructor(var repository: MovieRepositoryIml) :
         viewModelScope.launch {
             repository.getAllMovie().collect {
                 when (it) {
-
-
                     is DataState.Data -> {
-                        Log.e("onSuccess", "onSuccess: ${it.data}", )
                         setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }
                     }
                     is DataState.DataBase -> {

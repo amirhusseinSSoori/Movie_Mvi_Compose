@@ -16,6 +16,8 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
 
 
 
+
+
     override fun createInitialState(): DetailsContract.State {
         return DetailsContract.State(
             DetailsContract.DetailsState.Idle
@@ -30,7 +32,7 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
         }
     }
 
-    private fun showDetails(id: Int) {
+     private fun showDetails(id:Int) {
         repository.getSummery(id).onEach { data ->
             when (data) {
                 is DataState.Progress -> {

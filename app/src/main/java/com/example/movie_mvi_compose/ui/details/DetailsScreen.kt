@@ -32,6 +32,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movie_mvi_compose.R
+import com.example.movie_mvi_compose.ui.Navigation.NavScreen
 import com.example.movie_mvi_compose.ui.base.Loader
 import com.example.movie_mvi_compose.ui.base.ProgressBarState
 import com.example.movie_mvi_compose.ui.base.utilFont
@@ -47,14 +48,17 @@ import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @Composable
-fun DetailsMovie(id: String) {
-    val viewModel = hiltViewModel<DetailsViewModel>()
+fun DetailsMovie(id: Int,viewModel:DetailsViewModel,onEffect: () -> Unit) {
     val details by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
+    val currentEffect by rememberUpdatedState(onEffect)
     LaunchedEffect(true) {
-        viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt()))
+        currentEffect()
     }
+
+
+
 
     ConstraintLayout(
         modifier = Modifier
@@ -63,32 +67,35 @@ fun DetailsMovie(id: String) {
     ) {
         details.let { details ->
             when (details.state) {
-                is DetailsContract.DetailsState.Loading ->{
+                is DetailsContract.DetailsState.Loading -> {
                     Loading(progressBarState = details.state.data)
                 }
                 is DetailsContract.DetailsState.Success -> {
-                    val info = details.state.details
                     visible = false
-                    ScreenDetails(
-                        info.poster!!,
-                        info.title!!,
-                        info.cast!!,
-                        info.director!!,
-                        info.year!!,
-                        info.summary!!
-                    )
+
+                    details.state.details.apply {
+                        ScreenDetails(
+                            poster!!,
+                            title!!,
+                            cast!!,
+                            director!!,
+                            year!!,
+                            summary!!
+                        )
+                    }
+
                 }
-                else ->Unit
+                else -> Unit
             }
 
         }
-
         effect.let { effect ->
             when (effect) {
                 is DetailsContract.Effect.ShowError -> {
-                    Log.e("ErrorConnection : ", effect.message, )
+                    Log.e("ErrorConnection : ", effect.message)
                     ErrorConnection(updateUi = {
-                        viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt())) },visible)
+                   viewModel.setEvent(DetailsContract.Event.ShowDetails(id))
+                    }, visible)
                 }
             }
         }
@@ -100,7 +107,7 @@ fun DetailsMovie(id: String) {
 
 @ExperimentalAnimationApi
 @Composable
-fun ErrorConnection(updateUi : () ->Unit ,visible:Boolean) {
+fun ErrorConnection(updateUi: () -> Unit, visible: Boolean) {
     AnimatedVisibility(visible = visible) {
         Column(
             modifier = Modifier
@@ -110,17 +117,21 @@ fun ErrorConnection(updateUi : () ->Unit ,visible:Boolean) {
 
         ) {
             Loader(R.raw.poor)
-            Text(text = stringResource(id =R.string.error_connection ),modifier = Modifier.clickable {
-                updateUi()
+            Text(
+                text = stringResource(id = R.string.error_connection),
+                modifier = Modifier.clickable {
+                    updateUi()
 
 
-            },color = white)
+                },
+                color = white
+            )
         }
     }
 
 
-
 }
+
 @Composable
 fun Loading(progressBarState: ProgressBarState) {
     if (progressBarState is ProgressBarState.Loading) {
@@ -190,16 +201,18 @@ fun MovieDescription(
 
         // Cast
         Text(
-            text = stringResource(id =R.string.cast), color = Color(0xA3F3F1F1), modifier = Modifier
+            text = stringResource(id = R.string.cast), color = Color(0xA3F3F1F1),
+            modifier = Modifier
                 .constrainAs(topicCast) {
                     top.linkTo(title.bottom, margin = 5.dp)
                     start.linkTo(parent.start)
                 }
-                .fillMaxWidth(), fontFamily = utilFont,
+                .fillMaxWidth(),
+            fontFamily = utilFont,
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
 
-        )
+            )
 
         Card(
             modifier = Modifier
@@ -234,11 +247,15 @@ fun MovieDescription(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(id = R.string.director), color = Color(0x73F8F6F6), fontFamily = utilFont,
+                text = stringResource(id = R.string.director),
+                color = Color(0x73F8F6F6),
+                fontFamily = utilFont,
                 fontWeight = FontWeight.Normal
             )
             Text(
-                text = stringResource(id = R.string.Year), color = Color(0x73F8F6F6), fontFamily = utilFont,
+                text = stringResource(id = R.string.Year),
+                color = Color(0x73F8F6F6),
+                fontFamily = utilFont,
                 fontWeight = FontWeight.Normal
             )
         }
@@ -315,6 +332,7 @@ fun MovieDescription(
         ) {
             DetailsBox(dsSummery)
         }
+
 
     }
 

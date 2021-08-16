@@ -4,10 +4,10 @@ import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -38,6 +38,7 @@ fun InitialNavGraph() {
 
     val navController = rememberAnimatedNavController()
     val scope = rememberCoroutineScope()
+    val ctx= LocalContext.current
 
     AnimatedNavHost(navController = navController, startDestination = NavScreen.Intro.route) {
 
@@ -89,9 +90,9 @@ fun InitialNavGraph() {
             when (initial.destination.route) {
                 NavScreen.Details.route ->
                     slideInHorizontally(
-                        initialOffsetX = { 100 },
-                        animationSpec = tween(100)
-                    ) + fadeIn(animationSpec = tween(100))
+                        initialOffsetX = { 300 },
+                        animationSpec = tween(300)
+                    ) + fadeIn(animationSpec = tween(300))
                 else -> null
             }
         },
@@ -99,8 +100,8 @@ fun InitialNavGraph() {
                 when (target.destination.route) {
                     NavScreen.Details.route ->
                         slideOutHorizontally(
-                            targetOffsetX = { -100 },
-                            animationSpec = tween(100)
+                            targetOffsetX = { -300 },
+                            animationSpec = tween(300)
                         ) + fadeOut(animationSpec = tween(100))
                     else -> null
                 }
@@ -108,16 +109,11 @@ fun InitialNavGraph() {
 
 
         ) { backStackEntry ->
-            val viewModel = hiltViewModel<MovieViewModel>(backStackEntry)
-
+            val viewModel:MovieViewModel = hiltViewModel()
             MovieLazyList(navigateToDetailsScreen = {
                 navController.navigate("${NavScreen.Details.route}/$it")
-            }, viewModel = viewModel)
+            },viewModel)
         }
-
-
-
-
         composable(
             routeWithArgument,
             enterTransition = { initial, _ ->
@@ -151,9 +147,12 @@ fun InitialNavGraph() {
                 }
             },
             arguments = listOf(navArgument(argument0) { type = NavType.StringType })
-        ) {
-            DetailsMovie("${it.arguments?.get(argument0)}")
-
+        ) {backStackEntry->
+            val viewModel = hiltViewModel<DetailsViewModel>()
+            val id="${backStackEntry.arguments?.get(argument0)}".toInt()
+            DetailsMovie(id,viewModel,onEffect = {
+                viewModel.setEvent(DetailsContract.Event.ShowDetails(id))
+            })
         }
     }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -74,24 +75,18 @@ fun BtnRetry(UiUpdatePoorConnection: MovieViewModel,error:Boolean) {
                  }
 
              }
-
-
-         }
-
-
+    }
 }
 
 
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
-fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
-    val ctx=LocalContext.current
+fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit,viewModel: MovieViewModel) {
     val data by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
-    var error by  remember { mutableStateOf(true) }
-
+    val error by  remember { mutableStateOf(true) }
 
     ConstraintLayout(
         modifier = Modifier
@@ -117,11 +112,8 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
                     }
                     else -> Unit
                 }
-
             }
-
         }
-
         effect.let { effect ->
             when (effect) {
 

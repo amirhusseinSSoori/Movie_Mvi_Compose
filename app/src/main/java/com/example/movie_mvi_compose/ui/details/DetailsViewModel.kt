@@ -1,5 +1,7 @@
 package com.example.movie_mvi_compose.ui.details
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryIml
 import com.example.movie_mvi_compose.ui.base.*
@@ -11,6 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
     BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {
+
     override fun createInitialState(): DetailsContract.State {
         return DetailsContract.State(
             DetailsContract.DetailsState.Idle
@@ -25,12 +28,17 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
         }
     }
 
-    private fun showDetails(id: Int) {
+    fun showDetails(id: Int) {
         repository.getSummery(id).onEach { data ->
             when (data) {
+                is DataState.Progress -> {
+                    setState { copy(state = DetailsContract.DetailsState.Loading(data = data.progressBarState!!)) }
+                }
                 is DataState.Data -> {
+                   Log.e("onSuccess", "onSuccess: ${data.data}", )
                     setState { copy(state = DetailsContract.DetailsState.Success(details = data.data!!)) }
                 }
+
                 is DataState.Response -> {
                     if(data.uiComponent is UIComponent.ErrorConnection){
                         setEffect {
@@ -39,6 +47,7 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
                     }
 
                 }
+
             }
         }.launchIn(viewModelScope)
 

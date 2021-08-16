@@ -24,7 +24,7 @@ object Version {
     val okhttp3_version="5.0.0-alpha.2"
 
     //------------------------ hilt -------------------------------
-    val hilt_version ="2.37"
+    val hilt_version ="2.38.1"
     var hilt_lifecycle_version ="1.0.0-alpha03"
     val hilt_compiler_version ="1.0.0"
 

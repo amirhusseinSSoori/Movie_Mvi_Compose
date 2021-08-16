@@ -33,6 +33,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movie_mvi_compose.R
 import com.example.movie_mvi_compose.ui.base.Loader
+import com.example.movie_mvi_compose.ui.base.ProgressBarState
 import com.example.movie_mvi_compose.ui.base.utilFont
 import com.example.movie_mvi_compose.ui.movie.MovieContract
 import com.example.movie_mvi_compose.ui.movie.MovieViewModel
@@ -40,6 +41,8 @@ import com.example.movie_mvi_compose.ui.theme.black
 import com.example.movie_mvi_compose.ui.theme.white
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.coil.CoilImage
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 @ExperimentalAnimationApi
@@ -49,8 +52,11 @@ fun DetailsMovie(id: String) {
     val details by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
-    val ctx= LocalContext.current
 
+
+    LaunchedEffect(true) {
+        viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt()))
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -60,6 +66,9 @@ fun DetailsMovie(id: String) {
 
         details.let { details ->
             when (details.state) {
+                is DetailsContract.DetailsState.Loading ->{
+                    Loading(progressBarState = details.state.data)
+                }
                 is DetailsContract.DetailsState.Success -> {
                     val info = details.state.details
                     visible = false
@@ -71,9 +80,12 @@ fun DetailsMovie(id: String) {
                         info.year!!,
                         info.summary!!
                     )
+
                 }
+
                 else ->Unit
             }
+
 
         }
 
@@ -115,7 +127,19 @@ fun ErrorConnection(updateUi : () ->Unit ,visible:Boolean) {
 
 
 }
-
+@Composable
+fun Loading(progressBarState: ProgressBarState) {
+    if (progressBarState is ProgressBarState.Loading) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator(color = white)
+        }
+    }
+}
 
 @Composable
 fun ScreenDetails(

@@ -20,7 +20,9 @@ sealed class DataState<T> {
         val data: T ?=null
     ): DataState<T>()
 
-
+    data class Progress<T>(
+        val progressBarState: ProgressBarState = ProgressBarState.Idle
+    ): DataState<T>()
     //get from Server
     data class Data<T>(
         val data: T
@@ -34,8 +36,12 @@ sealed class DataState<T> {
     ): DataState<T>()
 
 
-}
 
+}
+sealed class ProgressBarState{
+    object Loading: ProgressBarState()
+    object Idle: ProgressBarState()
+}
 sealed class UIComponent{
     data class ErrorConnection(
         val message: String,

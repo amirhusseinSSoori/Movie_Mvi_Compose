@@ -3,6 +3,7 @@ package com.example.movie_mvi_compose.ui.details
 
 import com.example.movie_mvi_compose.data.network.response.MovieDetials
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
+import com.example.movie_mvi_compose.ui.base.ProgressBarState
 import com.example.movie_mvi_compose.ui.base.UiEffect
 import com.example.movie_mvi_compose.ui.base.UiEvent
 import com.example.movie_mvi_compose.ui.base.UiState
@@ -21,7 +22,9 @@ class DetailsContract {
 
     sealed class DetailsState {
         object Idle : DetailsState()
+        data class Loading(var data: ProgressBarState) : DetailsState()
         data class Success(var details: MovieDetials) : DetailsState()
+
     }
 
 

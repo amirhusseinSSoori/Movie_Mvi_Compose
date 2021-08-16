@@ -109,7 +109,7 @@ fun InitialNavGraph() {
 
         ) { backStackEntry ->
             val viewModel = hiltViewModel<MovieViewModel>(backStackEntry)
-            viewModel.setEvent(MovieContract.Event.ShowMovie)
+
             MovieLazyList(navigateToDetailsScreen = {
                 navController.navigate("${NavScreen.Details.route}/$it")
             }, viewModel = viewModel)
@@ -152,8 +152,6 @@ fun InitialNavGraph() {
             },
             arguments = listOf(navArgument(argument0) { type = NavType.StringType })
         ) {
-            val viewModel = hiltViewModel<DetailsViewModel>(it)
-            viewModel.setEvent(DetailsContract.Event.ShowDetails("${it.arguments?.get(argument0)}".toInt()))
             DetailsMovie("${it.arguments?.get(argument0)}")
 
         }

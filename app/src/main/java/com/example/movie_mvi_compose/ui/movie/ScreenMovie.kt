@@ -85,10 +85,16 @@ fun BtnRetry(UiUpdatePoorConnection: MovieViewModel,error:Boolean) {
 @ExperimentalFoundationApi
 @Composable
 fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
+
     val data by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
     var error by  remember { mutableStateOf(true) }
+
+    LaunchedEffect(true){
+        viewModel.setEvent(MovieContract.Event.ShowMovie)
+    }
+
     ConstraintLayout(
         modifier = Modifier
             .background(black)

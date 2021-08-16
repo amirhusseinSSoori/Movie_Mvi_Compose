@@ -1,5 +1,6 @@
 package com.example.movie_mvi_compose.ui.movie
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryIml
 import com.example.movie_mvi_compose.ui.base.BaseViewModel
@@ -32,7 +33,10 @@ class MovieViewModel @Inject constructor(var repository: MovieRepositoryIml) :
         viewModelScope.launch {
             repository.getAllMovie().collect {
                 when (it) {
+
+
                     is DataState.Data -> {
+
                         setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }
                     }
                     is DataState.DataBase -> {

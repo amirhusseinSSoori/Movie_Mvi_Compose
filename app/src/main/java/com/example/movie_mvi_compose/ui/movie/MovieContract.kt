@@ -19,6 +19,7 @@ class MovieContract {
     sealed class MovieState {
         object Idle : MovieState()
         data class Movie(var list: List<MovieEntity>): MovieState()
+
     }
 
 

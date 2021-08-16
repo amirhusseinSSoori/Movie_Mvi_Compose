@@ -52,8 +52,6 @@ fun DetailsMovie(id: String) {
     val details by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
-
-
     LaunchedEffect(true) {
         viewModel.setEvent(DetailsContract.Event.ShowDetails(id.toInt()))
     }
@@ -63,7 +61,6 @@ fun DetailsMovie(id: String) {
             .fillMaxSize()
             .background(black)
     ) {
-
         details.let { details ->
             when (details.state) {
                 is DetailsContract.DetailsState.Loading ->{
@@ -80,12 +77,9 @@ fun DetailsMovie(id: String) {
                         info.year!!,
                         info.summary!!
                     )
-
                 }
-
                 else ->Unit
             }
-
 
         }
 

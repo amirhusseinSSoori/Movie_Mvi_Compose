@@ -14,6 +14,8 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
     BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {
 
+
+
     override fun createInitialState(): DetailsContract.State {
         return DetailsContract.State(
             DetailsContract.DetailsState.Idle
@@ -28,7 +30,7 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
         }
     }
 
-    fun showDetails(id: Int) {
+    private fun showDetails(id: Int) {
         repository.getSummery(id).onEach { data ->
             when (data) {
                 is DataState.Progress -> {
@@ -38,14 +40,12 @@ class DetailsViewModel @Inject constructor(var repository: MovieRepositoryIml) :
                    Log.e("onSuccess", "onSuccess: ${data.data}", )
                     setState { copy(state = DetailsContract.DetailsState.Success(details = data.data!!)) }
                 }
-
                 is DataState.Response -> {
                     if(data.uiComponent is UIComponent.ErrorConnection){
                         setEffect {
                             DetailsContract.Effect.ShowError((data.uiComponent).message)
                         }
                     }
-
                 }
 
             }

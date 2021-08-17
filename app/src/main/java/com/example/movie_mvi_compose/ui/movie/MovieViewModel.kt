@@ -14,6 +14,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieViewModel @Inject constructor(var repository: MovieRepositoryIml) :
     BaseViewModel<MovieContract.Event, MovieContract.State, MovieContract.Effect>() {
+    init {
+        detailsOfMovies()
+    }
 
     override fun createInitialState(): MovieContract.State {
         return MovieContract.State(
@@ -35,6 +38,7 @@ class MovieViewModel @Inject constructor(var repository: MovieRepositoryIml) :
                 when (it) {
                     is DataState.Data -> {
                         setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }
+                        Log.e("TAG", "detailsOfMovies: ${it.data}", )
                     }
                     is DataState.DataBase -> {
                         setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }

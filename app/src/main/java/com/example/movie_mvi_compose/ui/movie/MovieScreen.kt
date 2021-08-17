@@ -93,7 +93,6 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit,viewModel: Movie
             .background(black)
             .fillMaxSize()
     ) {
-        viewModel.setEvent(MovieContract.Event.ShowMovie)
         Loading(visible = visible)
         LazyVerticalGrid(cells = GridCells.Fixed(4)) {
             data.let {

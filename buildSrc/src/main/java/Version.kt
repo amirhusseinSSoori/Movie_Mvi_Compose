@@ -45,5 +45,10 @@ object Version {
     val lotti="1.0.0-rc02-1"
 
 
+    //----------------------------------------- Navigation -------------------------------------------
+    val navigation="0.16.0"
+    val navigation_compose="2.4.0-alpha06"
+
+
 
 }

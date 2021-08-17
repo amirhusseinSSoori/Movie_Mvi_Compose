@@ -109,8 +109,12 @@ dependencies {
     dep.Util.apply {
         implementation(lotti)
     }
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.16.0")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha06")
+    dep.Navigation.apply {
+        implementation(navigation_accompanist)
+        implementation(navigation_compose)
+    }
+
+
 }
 
 kapt {

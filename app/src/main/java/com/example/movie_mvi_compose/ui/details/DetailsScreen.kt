@@ -5,21 +5,20 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.google.accompanist.coil.rememberCoilPainter
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,11 +46,11 @@ import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @Composable
-fun DetailsMovie(id: Int,viewModel:DetailsViewModel,onEffect: () -> Unit) {
+fun DetailsMovie(id: Int,viewModel:DetailsViewModel) {
     val details by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
     var visible by remember { mutableStateOf(true) }
-    onEffect()
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -339,24 +338,30 @@ fun Hover() {
 @Composable
 fun BackGroundImage(uri: String) {
     Column(modifier = Modifier.fillMaxSize()) {
-        CoilImage(
-            imageModel = uri,
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(10.dp)),
-            contentScale = ContentScale.Crop,
-            circularRevealedDuration = 450,
-            shimmerParams = ShimmerParams(
-                baseColor = MaterialTheme.colors.background,
-                highlightColor = Color(0xA3C2C2C2),
-                dropOff = 0.65f
-            ),
-            failure = {
-                Text(
-                    text = "image request failed.",
-                    style = MaterialTheme.typography.body2
-                )
-            }
+//        CoilImage(
+//            imageModel = uri,
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .clip(RoundedCornerShape(10.dp)),
+//            contentScale = ContentScale.Crop,
+//            circularRevealedDuration = 450,
+//            shimmerParams = ShimmerParams(
+//                baseColor = MaterialTheme.colors.background,
+//                highlightColor = Color(0xA3C2C2C2),
+//                dropOff = 0.65f
+//            ),
+//            failure = {
+//                Text(
+//                    text = "image request failed.",
+//                    style = MaterialTheme.typography.body2
+//                )
+//            }
+//        )
+
+        Image(
+            painter = rememberCoilPainter(uri),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
         )
 
     }

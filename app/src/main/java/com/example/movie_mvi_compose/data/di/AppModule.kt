@@ -1,8 +1,11 @@
 package com.example.movie_mvi_compose.data.di
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import coil.ImageLoader
 import com.example.movie_mvi_compose.BuildConfig.DEBUG
+import com.example.movie_mvi_compose.R
 import com.example.movie_mvi_compose.data.db.MovieDao
 import com.example.movie_mvi_compose.data.db.MyDataBase
 import com.example.movie_mvi_compose.data.network.Api.MovieClient
@@ -26,11 +29,11 @@ import javax.inject.Singleton
 object AppModule {
 
 
-
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.level = if (DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+        loggingInterceptor.level =
+            if (DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         return loggingInterceptor
     }
 
@@ -39,25 +42,25 @@ object AppModule {
     fun provideOkHttp(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .readTimeout(500 , TimeUnit.SECONDS)
-            .writeTimeout(500 , TimeUnit.SECONDS)
-            .connectTimeout(500 , TimeUnit.SECONDS)
+            .readTimeout(500, TimeUnit.SECONDS)
+            .writeTimeout(500, TimeUnit.SECONDS)
+            .connectTimeout(500, TimeUnit.SECONDS)
             .build()
     }
+
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder().
-        addConverterFactory(GsonConverterFactory.create())
+        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://raw.githubusercontent.com/android10/Sample-Data/master/Android-CleanArchitecture-Kotlin/")
             .build()
 
     }
-     @Provides
-     fun provideMovieApi(retrofit: Retrofit):MovieClient{
-         return retrofit.create(MovieClient::class.java)
-     }
 
+    @Provides
+    fun provideMovieApi(retrofit: Retrofit): MovieClient {
+        return retrofit.create(MovieClient::class.java)
+    }
 
 
     @Singleton
@@ -65,7 +68,7 @@ object AppModule {
     fun provideMyDb(
         @ApplicationContext context: Context,
     ): MyDataBase {
-      //  , callback: MyDataBase.Callback
+        //  , callback: MyDataBase.Callback
         return Room
             .databaseBuilder(
                 context,
@@ -84,7 +87,6 @@ object AppModule {
     fun provideMyDAO(myDataBase: MyDataBase): MovieDao {
         return myDataBase.getMyDao()
     }
-
 
 
 }

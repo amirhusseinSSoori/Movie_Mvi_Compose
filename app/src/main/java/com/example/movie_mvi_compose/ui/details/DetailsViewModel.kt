@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryIml
+import com.example.movie_mvi_compose.data.repository.details.DetailsRepository
+import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.ui.base.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    var repository: MovieRepositoryIml,
+    var repository: DetailsRepository,
     private val savedStateHandle: SavedStateHandle,
 ) :
     BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {

@@ -29,18 +29,8 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 @Composable
 fun InitialNavGraph(navController: NavHostController) {
-    val scope = rememberCoroutineScope()
     AnimatedNavHost(navController = navController, startDestination = Screen.Intro.route) {
-        addIntro(navigation = {
-            scope.launch {
-                delay(3000)
-                navController.navigate(Screen.MovieRoute.route) {
-                    popUpTo(Screen.Intro.route)
-                    popUpTo(Screen.Intro.route) { inclusive = true }
-                    launchSingleTop = true
-                }
-            }
-        })
+        addIntro(navController)
         addMovieList(navController)
         addMovieDetail()
 
@@ -48,7 +38,7 @@ fun InitialNavGraph(navController: NavHostController) {
 }
 
 @ExperimentalAnimationApi
-fun NavGraphBuilder.addIntro(navigation: () -> Unit) {
+fun NavGraphBuilder.addIntro(navController: NavController) {
     composable(Screen.Intro.route,
         enterTransition = { initial, _ ->
             when (initial.destination.route) {
@@ -80,8 +70,8 @@ fun NavGraphBuilder.addIntro(navigation: () -> Unit) {
                 else -> null
             }
         }) {
-        Splash()
-        navigation()
+        Splash(navController)
+
     }
 }
 
@@ -145,7 +135,7 @@ fun NavGraphBuilder.addMovieList(
     ) {
         val viewModel: MovieViewModel = hiltViewModel()
         MovieLazyList(navigateToDetailsScreen = {
-            navController.navigate("${Screen.DetailsRoute.route}/$it")
+            navController.navigate("${Screen.DetailsRoute.route}/$it"){}
         }, viewModel)
     }
 }

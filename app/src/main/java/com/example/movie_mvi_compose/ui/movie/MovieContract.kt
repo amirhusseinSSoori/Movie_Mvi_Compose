@@ -1,6 +1,7 @@
 package com.example.movie_mvi_compose.ui.movie
 
 import com.example.movie_mvi_compose.data.db.entity.MovieEntity
+import com.example.movie_mvi_compose.data.network.response.MovieItem
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import com.example.movie_mvi_compose.ui.base.*
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +19,7 @@ class MovieContract {
 
     sealed class MovieState {
         object Idle : MovieState()
-        data class Movie(var list: List<MovieEntity>): MovieState()
+        data class Movie(var list: List<MovieItem>): MovieState()
 
     }
 

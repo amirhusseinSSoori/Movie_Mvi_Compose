@@ -118,7 +118,7 @@ dependencies {
         implementation(navigation_compose)
     }
     // unit test
-
+    implementation ("com.dropbox.mobile.store:store4:4.0.2-KT15")
     testImplementation ("androidx.test:core:1.4.0")
     testImplementation ("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation ("org.mockito:mockito-inline:3.3.3")

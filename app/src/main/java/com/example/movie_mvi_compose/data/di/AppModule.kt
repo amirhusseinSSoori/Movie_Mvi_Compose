@@ -9,6 +9,8 @@ import com.example.movie_mvi_compose.data.mapper.MoviesMapper
 import com.example.movie_mvi_compose.data.network.Api.MovieClient
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepository
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepositoryImp
+import com.example.movie_mvi_compose.data.repository.movie.DispatcherProvider
+import com.example.movie_mvi_compose.data.repository.movie.DispatcherProviderImpl
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryImp
 import com.example.movie_mvi_compose.data.source.LocalSource
@@ -45,7 +47,7 @@ object AppModule {
             .addInterceptor(loggingInterceptor)
             .readTimeout(500, TimeUnit.SECONDS)
             .writeTimeout(500, TimeUnit.SECONDS)
-            .connectTimeout(500, TimeUnit.SECONDS)
+            .connectTimeout(10000, TimeUnit.SECONDS)
             .build()
     }
 
@@ -57,7 +59,8 @@ object AppModule {
             .build()
 
     }
-
+    @Provides
+    fun provideDispatcherProvider(): DispatcherProvider = DispatcherProviderImpl()
     @Provides
     fun provideMovieApi(retrofit: Retrofit): MovieClient {
         return retrofit.create(MovieClient::class.java)
@@ -90,9 +93,10 @@ object AppModule {
         network: RemoteSource,
         local: LocalSource,
         mapper: MoviesMapper,
-        db: MyDataBase
+        db: MyDataBase,
+        dispatcher: DispatcherProvider
     ): MovieRepository {
-        return MovieRepositoryImp(network, local, mapper, db)
+        return MovieRepositoryImp(network, local, mapper, db,dispatcher)
     }
     @Provides
     fun provideDetailsRepository(network: RemoteSource):DetailsRepository{

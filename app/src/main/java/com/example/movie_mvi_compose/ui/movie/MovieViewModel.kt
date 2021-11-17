@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.ui.base.BaseViewModel
-import com.example.movie_mvi_compose.ui.base.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -34,23 +33,11 @@ class MovieViewModel @Inject constructor(var repository: MovieRepository) :
 
     private fun detailsOfMovies() {
         viewModelScope.launch {
-            repository.getAllMovie().collect {
-                when (it) {
-                    is DataState.Data -> {
-                        setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }
-                        Log.e("TAG", "detailsOfMovies: ${it.data}", )
-                    }
-                    is DataState.DataBase -> {
-                        setState { copy(state = MovieContract.MovieState.Movie(list = it.data)) }
-                        setEffect { MovieContract.Effect.ShowError(it.message, list = it.data)
-                        }
-                    }
-                    else -> Unit
-                }
+            repository.getLatestNews().collect {
+                if(it.isSuccess()){
+                   setState { copy(state = MovieContract.MovieState.Movie(list = it.data!!)) }
+               }
             }
-
         }
-
-
     }
 }

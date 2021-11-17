@@ -37,11 +37,6 @@ fun Loader(anim:Int) {
             progress,
         )
     }
-
-
-
-
-
 }
 val utilFont = FontFamily(
     Font(R.font.domine_bold, FontWeight.Light),

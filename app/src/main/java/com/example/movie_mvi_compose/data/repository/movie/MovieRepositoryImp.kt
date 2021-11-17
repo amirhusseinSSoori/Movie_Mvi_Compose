@@ -20,45 +20,22 @@ class MovieRepositoryImp @Inject constructor(
     var network: RemoteSource,
     var local: LocalSource,
     var mapper: MoviesMapper,
-    var db: MyDataBase,
-     val dispatcher: DispatcherProvider
-) : MovieRepository {
+    var db: MyDataBase
+    ) : MovieRepository {
+
 
     @FlowPreview
-    private val store: Store<String, List<MovieEntity>> = StoreBuilder.from(
+    override fun getStore(): Store<String, List<MovieEntity>> = StoreBuilder.from(
         fetcher = Fetcher.of { _: String ->
             network.remoteAllMovie()
         },
         sourceOfTruth = SourceOfTruth.Companion.of(
-            reader = { key -> local.allMovie() },
-            writer = { key: String, input: MovieResponse ->
-                val latestNews = mapper.mapFromEntityList(input)
-                local.db.update(latestNews)
+            reader = { local.allMovie() },
+            writer = { _, input: MovieResponse ->
+                local.db.update(mapper.mapFromEntityList(input))
             }
         )
     ).build()
-
-    override suspend fun getLatestNews(): Flow<Result<List<MovieItem>>> {
-        return flow {
-            store.stream(StoreRequest.cached(key = "latest_news", refresh = true))
-                .flowOn(dispatcher.io())
-                .collect { response: StoreResponse<List<MovieEntity>> ->
-                    when (response) {
-                        is StoreResponse.Loading -> {
-                            emit(Result.loading<List<MovieItem>>())
-                        }
-                        is StoreResponse.Error -> {
-                            emit(Result.error<List<MovieItem>>())
-                        }
-                        is StoreResponse.Data -> {
-                            emit(Result.success(mapper.mapToEntityList(response.value)))
-                        }
-                        is StoreResponse.NoNewData -> emit(Result.success(emptyList<MovieItem>()))
-                    }
-                }
-        }.flowOn(dispatcher.io())
-    }
-
 }
 
 

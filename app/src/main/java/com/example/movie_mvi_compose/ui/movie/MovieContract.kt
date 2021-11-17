@@ -19,6 +19,8 @@ class MovieContract {
 
     sealed class MovieState {
         object Idle : MovieState()
+        data class  Loading(var enable:Boolean = false): MovieState()
+        data class  Error(var message:String ): MovieState()
         data class Movie(var list: List<MovieItem>): MovieState()
 
     }

@@ -47,7 +47,7 @@ object AppModule {
             .addInterceptor(loggingInterceptor)
             .readTimeout(500, TimeUnit.SECONDS)
             .writeTimeout(500, TimeUnit.SECONDS)
-            .connectTimeout(10000, TimeUnit.SECONDS)
+            .connectTimeout(500, TimeUnit.SECONDS)
             .build()
     }
 
@@ -93,10 +93,9 @@ object AppModule {
         network: RemoteSource,
         local: LocalSource,
         mapper: MoviesMapper,
-        db: MyDataBase,
-        dispatcher: DispatcherProvider
+        db: MyDataBase
     ): MovieRepository {
-        return MovieRepositoryImp(network, local, mapper, db,dispatcher)
+        return MovieRepositoryImp(network, local, mapper, db)
     }
     @Provides
     fun provideDetailsRepository(network: RemoteSource):DetailsRepository{

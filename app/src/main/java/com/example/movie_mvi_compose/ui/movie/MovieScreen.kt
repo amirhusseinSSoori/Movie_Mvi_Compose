@@ -34,6 +34,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movie_mvi_compose.R
+import com.example.movie_mvi_compose.ui.base.DataState
 import com.example.movie_mvi_compose.ui.details.DetailsContract
 import com.example.movie_mvi_compose.ui.theme.black
 import com.example.movie_mvi_compose.ui.theme.white
@@ -63,18 +64,20 @@ fun MovieRowItem(uri: String, navigateToDetailsScreen: (id: String) -> Unit, id:
 
 @ExperimentalAnimationApi
 @Composable
-fun BtnRetry(UiUpdatePoorConnection: MovieViewModel,error:Boolean) {
+fun BtnRetry(UiUpdatePoorConnection: MovieViewModel, error: Boolean) {
     AnimatedVisibility(visible = error) {
-             Column(
-                 modifier = Modifier.fillMaxSize(),
-                 horizontalAlignment = Alignment.CenterHorizontally,
-                 verticalArrangement = Arrangement.Center
-             ) {
-                 Button(onClick = { UiUpdatePoorConnection.setEvent(MovieContract.Event.ShowMovie) }) {
-                     Text(text = "Retry")
-                 }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = {
+//                UiUpdatePoorConnection.setEvent(MovieContract.Event.ShowMovie)
+            }) {
+                Text(text = "Retry")
+            }
 
-             }
+        }
     }
 }
 
@@ -82,53 +85,34 @@ fun BtnRetry(UiUpdatePoorConnection: MovieViewModel,error:Boolean) {
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
-fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit,viewModel: MovieViewModel) {
-    val data by viewModel.uiState.collectAsState()
-    val effect by viewModel.effect.collectAsState(initial = MovieContract.Effect.Empty)
-    var visible by remember { mutableStateOf(true) }
-    val error by  remember { mutableStateOf(true) }
-
+fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
+    val data by viewModel._stateMovie.collectAsState()
     ConstraintLayout(
         modifier = Modifier
             .background(black)
             .fillMaxSize()
     ) {
-        Loading(visible = visible)
-        LazyVerticalGrid(cells = GridCells.Fixed(4)) {
-            data.let {
-                when (it.state) {
-                    is MovieContract.MovieState.Movie -> {
-                       val items=it.state.list
-                        visible = false
-                        items(items.size) { data ->
-                            val (id, poster) = it.state.list!![data]
-                            MovieRowItem(
-                                poster!!,
-                                navigateToDetailsScreen, id!!
-                            )
-
-                        }
-                    }
-                    else -> Unit
-                }
-            }
-        }
-        effect.let { effect ->
-            when (effect) {
-
-                is MovieContract.Effect.ShowError -> {
-                    if(effect.list.isEmpty()){
-                        BtnRetry(viewModel,error)
-                    }
+        data.let {
+            Loading(visible = it.loading)
+            val items = it.details
+            LazyVerticalGrid(cells = GridCells.Fixed(4)) {
+                items(items!!.size) { data ->
+                    val (id, poster) = items!![data]
+                    MovieRowItem(
+                        poster!!,
+                        navigateToDetailsScreen, id!!
+                    )
                 }
             }
 
-        }
 
+
+        }
     }
-
-
 }
+
+
+
 
 @Composable
 fun Loading(visible: Boolean) {
@@ -172,3 +156,5 @@ fun NetworkImage(
         }
     )
 }
+
+

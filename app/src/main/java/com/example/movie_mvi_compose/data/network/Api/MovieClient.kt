@@ -18,6 +18,6 @@ interface MovieClient {
     suspend fun movies(): MovieResponse
 
     @GET(MOVIE_DETAILS)
-    suspend fun movieDetails(@Path(PARAM_MOVIE_ID) movieId: Int):  MovieDetials
+    suspend fun movieDetails(@Path(PARAM_MOVIE_ID) movieId: Int) :  MovieDetials
 
 }

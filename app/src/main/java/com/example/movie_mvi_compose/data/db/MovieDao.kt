@@ -11,13 +11,16 @@ interface MovieDao {
     suspend fun insertDetails(details: List<MovieEntity>)
 
     @Query("SELECT * FROM MovieEntity")
-    fun getAllMovie(): Flow<List<MovieEntity>>
+     fun getAllMovie(): Flow<List<MovieEntity>>
 
     @Query("DELETE FROM MovieEntity")
     suspend fun deleteAllMovies()
 
+
     @Query("DELETE  FROM MovieEntity")
     suspend fun deleteAll()
+
+
     @Transaction
     suspend fun update(news: List<MovieEntity>) {
         deleteAll()

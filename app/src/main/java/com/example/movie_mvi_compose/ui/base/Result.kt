@@ -5,18 +5,22 @@ import androidx.annotation.NonNull
 data class Result<T>(val status: Int, val data: T?) {
     fun isError() = status == STATUS_ERROR
     fun isLoading() = status == STATUS_LOADING
+    fun isNot() = status == STATUS_LOADING
     fun isSuccess() = status == STATUS_SUCCESS
 
     companion object {
         private const val STATUS_LOADING = 0
         private const val STATUS_SUCCESS = 1
         private const val STATUS_ERROR = -1
-
+        private const val STATUS_NOT = 2
         /**
          * Helper method to create fresh state result
          */
         fun <T> success(@NonNull data: T): Result<T> {
             return Result(STATUS_SUCCESS, data)
+        }
+        fun <T> not(@NonNull data: T): Result<T> {
+            return Result(STATUS_NOT, data)
         }
 
         /**

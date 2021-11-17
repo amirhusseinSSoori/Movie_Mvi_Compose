@@ -1,9 +1,9 @@
 object Version {
 
     //----------------- main --------------------------------
-    val kotlin_version = "1.5.21"
-    val gradle_Version="7.0.2"
-    val core_ktx_version = "1.6.0"
+    val kotlin_version = "1.5.31"
+    val gradle_Version="7.0.3"
+    val core_ktx_version = "1.7.0"
     val appcompat_version = "1.3.1"
     val material_version = "1.4.0"
     val experso_version="3.4.0"
@@ -14,7 +14,7 @@ object Version {
 
 
     //---------------------- compose ---------------------------------
-    val compose_version= "1.0.2"
+    val compose_version= "1.0.5"
     val constraintlayout_compose_version ="1.0.0-alpha08"
     val activity_compose_version="1.3.0-rc02"
 
@@ -30,14 +30,13 @@ object Version {
 
 
     //------------------------- lifecycle -------------------------------
-    val lifecycle_version="2.3.1"
+    val lifecycle_version="2.4.0"
 
     // ------------------------ room ---------------------------------------
     val room ="2.4.0-alpha04"
 
     //------------------------------- coroutines  -------------------------------------
-
-        val coroutines="1.5.0"
+    val coroutines="1.5.2"
     //---------------------------------------- coil------------------------------------
     val coil ="0.12.0"
     val coil_landscapist="1.2.4"

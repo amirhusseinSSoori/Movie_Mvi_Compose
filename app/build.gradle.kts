@@ -6,13 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk = (30)
-    buildToolsVersion = ("30.0.3")
+    compileSdk = (31)
 
     defaultConfig {
         applicationId = ("com.example.movie_mvi_compose")
         minSdk = (21)
-        targetSdk = (30)
+        targetSdk = (31)
         versionCode = (1)
         versionName = ("1.0")
 
@@ -45,13 +44,14 @@ android {
     buildFeatures {
         compose = true
     }
+
     packagingOptions {
         exclude ("META-INF/AL2.0")
         exclude ("META-INF/LGPL2.1")
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = ("1.0.1")
-        kotlinCompilerVersion = ("1.5.20")
+        kotlinCompilerExtensionVersion = ("1.0.5")
+        kotlinCompilerVersion = ("1.5.31")
     }
 
 

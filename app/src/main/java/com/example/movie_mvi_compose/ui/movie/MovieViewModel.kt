@@ -11,6 +11,7 @@ import com.example.movie_mvi_compose.data.repository.movie.DispatcherProvider
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +33,6 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-
     private suspend fun getLatestMovie() {
         repository.getStore().stream(StoreRequest.cached(key = "item", refresh = true))
             .flowOn(dispatcher.io())
@@ -46,8 +46,7 @@ class MovieViewModel @Inject constructor(
                     }
                     is StoreResponse.Data -> {
                         stateMovie.value = stateMovie.value.copy(loading = false)
-                        stateMovie.value =
-                            stateMovie.value.copy(details = mapper.mapToEntityList(response.value))
+                        stateMovie.value = stateMovie.value.copy(details = mapper.mapToEntityList(response.value))
                     }
                     else -> Unit
                 }

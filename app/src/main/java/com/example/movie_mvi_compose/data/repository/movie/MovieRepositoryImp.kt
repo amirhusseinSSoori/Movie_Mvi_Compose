@@ -19,11 +19,8 @@ import javax.inject.Inject
 class MovieRepositoryImp @Inject constructor(
     var network: RemoteSource,
     var local: LocalSource,
-    var mapper: MoviesMapper,
-    var db: MyDataBase
     ) : MovieRepository {
-
-
+    @ExperimentalCoroutinesApi
     @FlowPreview
     override fun getStore(): Store<String, List<MovieEntity>> = StoreBuilder.from(
         fetcher = Fetcher.of { _: String ->
@@ -32,7 +29,7 @@ class MovieRepositoryImp @Inject constructor(
         sourceOfTruth = SourceOfTruth.Companion.of(
             reader = { local.allMovie() },
             writer = { _, input: MovieResponse ->
-                local.db.update(mapper.mapFromEntityList(input))
+                local.allMovieUpdate(input)
             }
         )
     ).build()
@@ -43,7 +40,6 @@ interface DispatcherProvider {
     fun main(): CoroutineDispatcher = Dispatchers.Main
     fun default(): CoroutineDispatcher = Dispatchers.Default
     fun io(): CoroutineDispatcher = Dispatchers.IO
-    fun unconfined(): CoroutineDispatcher = Dispatchers.Unconfined
 }
 
 class DispatcherProviderImpl : DispatcherProvider

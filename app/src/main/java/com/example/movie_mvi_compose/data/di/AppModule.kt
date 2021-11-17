@@ -95,7 +95,7 @@ object AppModule {
         mapper: MoviesMapper,
         db: MyDataBase
     ): MovieRepository {
-        return MovieRepositoryImp(network, local, mapper, db)
+        return MovieRepositoryImp(network, local)
     }
     @Provides
     fun provideDetailsRepository(network: RemoteSource):DetailsRepository{

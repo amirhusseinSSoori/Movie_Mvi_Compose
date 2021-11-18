@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class MovieRepositoryImp @Inject constructor(
-    var network: RemoteSource,
-    var local: LocalSource,
+    private val network: RemoteSource,
+    private val local: LocalSource,
     ) : MovieRepository {
     @ExperimentalCoroutinesApi
     @FlowPreview
@@ -41,5 +41,4 @@ interface DispatcherProvider {
     fun default(): CoroutineDispatcher = Dispatchers.Default
     fun io(): CoroutineDispatcher = Dispatchers.IO
 }
-
 class DispatcherProviderImpl : DispatcherProvider

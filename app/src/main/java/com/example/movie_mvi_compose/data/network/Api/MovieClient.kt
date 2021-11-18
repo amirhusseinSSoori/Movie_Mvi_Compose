@@ -2,8 +2,6 @@ package com.example.movie_mvi_compose.data.network.Api
 
 import com.example.movie_mvi_compose.data.network.response.MovieDetials
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
-import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -15,9 +13,9 @@ interface MovieClient {
     }
 
     @GET(MOVIES)
-    suspend fun movies(): MovieResponse
+    suspend fun callMovies(): MovieResponse
 
     @GET(MOVIE_DETAILS)
-    suspend fun movieDetails(@Path(PARAM_MOVIE_ID) movieId: Int) :  MovieDetials
+    suspend fun showMovieDetails(@Path(PARAM_MOVIE_ID) movieId: Int) :  MovieDetials
 
 }

@@ -9,9 +9,7 @@ import com.example.movie_mvi_compose.data.mapper.MoviesMapper
 import com.example.movie_mvi_compose.data.network.response.MovieItem
 import com.example.movie_mvi_compose.data.repository.movie.DispatcherProvider
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
-import com.example.movie_mvi_compose.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,13 +17,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    var repository: MovieRepository,
-    val dispatcher: DispatcherProvider,
-    var mapper: MoviesMapper,
+    private val repository: MovieRepository,
+    private val dispatcher: DispatcherProvider,
+    private val mapper: MoviesMapper,
 ) : ViewModel() {
 
-    val stateMovie = MutableStateFlow(StateList())
-    val _stateMovie = stateMovie.asStateFlow()
+    val movieState = MutableStateFlow(StateMovie())
+    val _movieState = movieState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -39,14 +37,15 @@ class MovieViewModel @Inject constructor(
             .collect { response: StoreResponse<List<MovieEntity>> ->
                 when (response) {
                     is StoreResponse.Loading -> {
-                        stateMovie.value = stateMovie.value.copy(loading = true)
+                        movieState.value = movieState.value.copy(loading = true)
                     }
                     is StoreResponse.Error -> {
-                        stateMovie.value = stateMovie.value.copy(message = "error Connection")
+                        movieState.value = movieState.value.copy(message = "error Connection")
                     }
                     is StoreResponse.Data -> {
-                        stateMovie.value = stateMovie.value.copy(loading = false)
-                        stateMovie.value = stateMovie.value.copy(details = mapper.mapToEntityList(response.value))
+                        movieState.value = movieState.value.copy(loading = false)
+                        movieState.value =
+                            movieState.value.copy(details = mapper.mapToEntityList(response.value))
                     }
                     else -> Unit
                 }
@@ -54,7 +53,7 @@ class MovieViewModel @Inject constructor(
     }
 
 
-    data class StateList(
+    data class StateMovie(
         var loading: Boolean = false,
         var message: String = " ",
         var details: List<MovieItem>? = emptyList(),

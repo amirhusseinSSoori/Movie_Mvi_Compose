@@ -6,7 +6,7 @@ import com.example.movie_mvi_compose.data.mapper.MoviesMapper
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import javax.inject.Inject
 
-class LocalSource @Inject constructor(val db: MovieDao, var mapper: MoviesMapper) {
+class LocalSource @Inject constructor(val db: MovieDao, val mapper: MoviesMapper) {
     fun allMovie() = db.getAllMovie()
     suspend fun allMovieUpdate(movies: MovieResponse) = db.update(mapper.mapFromEntityList(movies))
 }

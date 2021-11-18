@@ -1,7 +1,5 @@
 package com.example.movie_mvi_compose.ui.movie
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -21,21 +19,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movie_mvi_compose.R
-import com.example.movie_mvi_compose.ui.base.DataState
-import com.example.movie_mvi_compose.ui.details.DetailsContract
 import com.example.movie_mvi_compose.ui.theme.black
 import com.example.movie_mvi_compose.ui.theme.white
 import com.skydoves.landscapist.ShimmerParams
@@ -86,7 +75,7 @@ fun BtnRetry(UiUpdatePoorConnection: MovieViewModel, error: Boolean) {
 @ExperimentalFoundationApi
 @Composable
 fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
-    val data by viewModel._stateMovie.collectAsState()
+    val data by viewModel._movieState.collectAsState()
     ConstraintLayout(
         modifier = Modifier
             .background(black)

@@ -5,6 +5,6 @@ import com.example.movie_mvi_compose.data.network.Api.MovieClient
 import javax.inject.Inject
 
 class RemoteSource @Inject constructor(var api:MovieClient) {
-   suspend fun remoteAllMovie() = api.callMovies()
-   suspend fun remoteDetailsMovie(id:Int)= api.showMovieDetails(id)
+   suspend fun remoteAllMovies() = api.callMovies()
+   suspend fun remoteDetailsMovies(id:Int)= api.showMovieDetails(id)
 }

@@ -15,6 +15,7 @@ import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryImp
 import com.example.movie_mvi_compose.data.source.LocalSource
 import com.example.movie_mvi_compose.data.source.RemoteSource
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,20 +48,28 @@ object AppModule {
             .addInterceptor(loggingInterceptor)
             .readTimeout(500, TimeUnit.SECONDS)
             .writeTimeout(500, TimeUnit.SECONDS)
-            .connectTimeout(500, TimeUnit.SECONDS)
+            .connectTimeout(10000, TimeUnit.SECONDS)
             .build()
     }
 
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+        return Retrofit.Builder().addConverterFactory(
+            GsonConverterFactory.create(
+                GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd")
+                    .create()
+            )
+        )
             .baseUrl("https://raw.githubusercontent.com/android10/Sample-Data/master/Android-CleanArchitecture-Kotlin/")
             .build()
 
     }
+
     @Provides
     fun provideDispatcherProvider(): DispatcherProvider = DispatcherProviderImpl()
+
     @Provides
     fun provideMovieApi(retrofit: Retrofit): MovieClient {
         return retrofit.create(MovieClient::class.java)
@@ -97,8 +106,9 @@ object AppModule {
     ): MovieRepository {
         return MovieRepositoryImp(network, local)
     }
+
     @Provides
-    fun provideDetailsRepository(network: RemoteSource):DetailsRepository{
+    fun provideDetailsRepository(network: RemoteSource): DetailsRepository {
         return DetailsRepositoryImp(network)
     }
 

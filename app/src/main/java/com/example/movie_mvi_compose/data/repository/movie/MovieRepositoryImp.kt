@@ -1,22 +1,13 @@
 package com.example.movie_mvi_compose.data.repository.movie
 
 import com.dropbox.android.external.store4.*
-import com.example.movie_mvi_compose.data.db.MyDataBase
 import com.example.movie_mvi_compose.data.db.entity.MovieEntity
-import com.example.movie_mvi_compose.data.mapper.MoviesMapper
-import com.example.movie_mvi_compose.data.network.response.MovieItem
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import com.example.movie_mvi_compose.data.source.LocalSource
 import com.example.movie_mvi_compose.data.source.RemoteSource
-import com.example.movie_mvi_compose.ui.base.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
 
-class MovieRepositoryImp @Inject constructor(
+class MovieRepositoryImp (
     private val network: RemoteSource,
     private val local: LocalSource,
     ) : MovieRepository {
@@ -24,12 +15,12 @@ class MovieRepositoryImp @Inject constructor(
     @FlowPreview
     override fun getStore(): Store<String, List<MovieEntity>> = StoreBuilder.from(
         fetcher = Fetcher.of { _: String ->
-            network.remoteAllMovie()
+            network.remoteAllMovies()
         },
         sourceOfTruth = SourceOfTruth.Companion.of(
-            reader = { local.allMovie() },
+            reader = { local.allMovies() },
             writer = { _, input: MovieResponse ->
-                local.allMovieUpdate(input)
+                local.updateAllMovies(input)
             }
         )
     ).build()

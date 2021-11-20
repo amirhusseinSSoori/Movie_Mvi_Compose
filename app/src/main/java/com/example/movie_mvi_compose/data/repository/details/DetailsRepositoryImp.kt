@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class DetailsRepositoryImp @Inject constructor(var network: RemoteSource) :DetailsRepository {
+class DetailsRepositoryImp (var network: RemoteSource) :DetailsRepository {
     override fun getSummery(id:Int): Flow<DataState<MovieDetials>> = flow {
         runCatching {
-            network.remoteDetailsMovie(id)
+            network.remoteDetailsMovies(id)
         }.onSuccess {
             emit(DataState.Data(it))
         }.onFailure {

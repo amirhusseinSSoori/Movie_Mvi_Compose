@@ -36,7 +36,7 @@ fun MovieRowItem(uri: String, navigateToDetailsScreen: (id: String) -> Unit, id:
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp)
+            .height(250.dp)
             .clickable {
                 navigateToDetailsScreen(id)
             }
@@ -84,7 +84,7 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
         data.let {
             Loading(visible = it.loading)
             val items = it.details
-            LazyVerticalGrid(cells = GridCells.Fixed(4)) {
+            LazyVerticalGrid(cells = GridCells.Fixed(2)) {
                 items(items!!.size) { data ->
                     val (id, poster) = items!![data]
                     MovieRowItem(

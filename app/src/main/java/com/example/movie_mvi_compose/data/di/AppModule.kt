@@ -3,9 +3,8 @@ package com.example.movie_mvi_compose.data.di
 import android.content.Context
 import androidx.room.Room
 import com.example.movie_mvi_compose.BuildConfig.DEBUG
-import com.example.movie_mvi_compose.data.db.MovieDao
 import com.example.movie_mvi_compose.data.db.MyDataBase
-import com.example.movie_mvi_compose.data.mapper.MoviesMapper
+import com.example.movie_mvi_compose.data.db.dao.MovieDao
 import com.example.movie_mvi_compose.data.network.Api.MovieClient
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepository
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepositoryImp
@@ -100,9 +99,7 @@ object AppModule {
     @Provides
     fun provideMovieRepository(
         network: RemoteSource,
-        local: LocalSource,
-        mapper: MoviesMapper,
-        db: MyDataBase
+        local: LocalSource
     ): MovieRepository {
         return MovieRepositoryImp(network, local)
     }

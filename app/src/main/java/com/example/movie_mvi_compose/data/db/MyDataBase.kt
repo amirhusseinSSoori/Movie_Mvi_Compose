@@ -2,6 +2,7 @@ package com.example.movie_mvi_compose.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.movie_mvi_compose.data.db.dao.MovieDao
 import com.example.movie_mvi_compose.data.db.entity.MovieEntity
 
 
@@ -12,5 +13,4 @@ import com.example.movie_mvi_compose.data.db.entity.MovieEntity
 abstract class MyDataBase : RoomDatabase()
 {
     abstract fun getMyDao(): MovieDao
-
 }

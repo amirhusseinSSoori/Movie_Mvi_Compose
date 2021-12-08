@@ -18,8 +18,6 @@ class DetailsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ) :
     BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {
-
-
     init {
         savedStateHandle.get<Int>("details")?.let { heroId ->
             showDetails(heroId)
@@ -43,19 +41,13 @@ class DetailsViewModel @Inject constructor(
 
     private fun showDetails(id: Int) {
         repository.getSummery(id).onEach { data ->
-            when (data) {
-                is DataState.Data -> {
-                    setState { copy(state = DetailsContract.DetailsState.Success(details = data.data!!)) }
+            data.fold(onSuccess = {
+                setState { copy(state = DetailsContract.DetailsState.Success(details = it.body()!!)) }
+            }, onFailure = {
+                setEffect {
+                    DetailsContract.Effect.ShowError(it.message!!)
                 }
-                is DataState.Response -> {
-                    if (data.uiComponent is UIComponent.ErrorConnection) {
-                        setEffect {
-                            DetailsContract.Effect.ShowError((data.uiComponent).message)
-                        }
-                    }
-                }
-
-            }
+            })
         }.launchIn(viewModelScope)
 
     }

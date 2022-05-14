@@ -97,7 +97,7 @@ object AppModule {
     @Provides
     fun provideMovieRepository(
         network: RemoteSource,
-        local: LocalSource
+        local: LocalSource,
     ): MovieRepository {
         return MovieRepositoryImp(network, local)
     }

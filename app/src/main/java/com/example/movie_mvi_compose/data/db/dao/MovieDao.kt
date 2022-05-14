@@ -14,9 +14,13 @@ abstract class MovieDao: BaseDao<MovieEntity> {
     @Query("SELECT * FROM MovieEntity")
     abstract fun getAllMovie(): Flow<List<MovieEntity>>
 
+    @Query("DELETE  FROM MovieEntity")
+    abstract suspend fun delete()
+
     @Transaction
     open suspend fun update(obj: List<MovieEntity>) {
-        delete(obj)
+        delete()
         insert(obj)
     }
+
 }

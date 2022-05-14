@@ -3,31 +3,20 @@ package com.example.movie_mvi_compose.ui.intro
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.movie_mvi_compose.R
-import com.example.movie_mvi_compose.ui.Navigation.Screen
+import com.example.movie_mvi_compose.ui.Navigation.ScreenRoute
 import com.example.movie_mvi_compose.ui.base.Loader
 import com.example.movie_mvi_compose.ui.base.utilFont
 import com.example.movie_mvi_compose.ui.theme.black
@@ -49,8 +38,8 @@ fun Splash(navController:NavController) {
             )
         )
         delay(3000L)
-        navController.navigate(Screen.MovieRoute.route) {
-            popUpTo(Screen.Intro.route) { inclusive = true }
+        navController.navigate(ScreenRoute.MovieRoute.route) {
+            popUpTo(ScreenRoute.Intro.route) { inclusive = true }
             launchSingleTop = true
         }
     }

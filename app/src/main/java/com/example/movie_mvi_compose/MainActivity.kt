@@ -8,6 +8,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -25,20 +26,21 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
 
-    @VisibleForTesting
-    val viewModel: MovieViewModel by viewModels()
-    @ExperimentalComposeUiApi
-    @ExperimentalAnimationApi
-    @ExperimentalFoundationApi
+
+    @OptIn(
+        ExperimentalComposeUiApi::class,
+        ExperimentalFoundationApi::class,
+        ExperimentalMaterialApi::class,
+        ExperimentalAnimationApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Movie_Mvi_ComposeTheme {
                 val navController: NavHostController = rememberAnimatedNavController()
                 Surface(color = MaterialTheme.colors.background) {
-
-                        InitialNavGraph(navController)
-                    }
+                    InitialNavGraph(navController)
+                }
 
             }
         }

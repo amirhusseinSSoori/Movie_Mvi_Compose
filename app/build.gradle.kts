@@ -39,19 +39,18 @@ android {
     }
     kotlinOptions {
         jvmTarget = ("1.8")
-        useIR = true
     }
     buildFeatures {
         compose = true
     }
 
     packagingOptions {
-        exclude ("META-INF/AL2.0")
-        exclude ("META-INF/LGPL2.1")
+        resources {
+            excludes += ("/META-INF/{AL2.0,LGPL2.1}")
+        }
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = ("1.0.5")
-        kotlinCompilerVersion = ("1.5.31")
+        kotlinCompilerExtensionVersion = ("1.1.1")
     }
 
 
@@ -115,30 +114,30 @@ dependencies {
     }
     dep.Navigation.apply {
         implementation(navigation_accompanist)
-        implementation(navigation_compose)
+        implementation(navigation_hilt_compose)
     }
     // unit test
-    implementation ("com.dropbox.mobile.store:store4:4.0.2-KT15")
+    implementation ("com.dropbox.mobile.store:store4:4.0.5")
     testImplementation ("androidx.test:core:1.4.0")
     testImplementation ("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation ("org.mockito:mockito-inline:3.3.3")
-    testImplementation ("app.cash.turbine:turbine:0.2.0")
-    testImplementation ("org.robolectric:robolectric:4.6.1")
+    testImplementation ("org.mockito:mockito-inline:3.11.2")
+    testImplementation ("app.cash.turbine:turbine:0.8.0")
+    testImplementation ("org.robolectric:robolectric:4.7.3")
     androidTestImplementation ("com.google.truth:truth:1.1.3")
     androidTestImplementation ("com.android.support.test:runner:1.3.0-beta01")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
     testImplementation ("androidx.arch.core:core-testing:2.1.0")
     testImplementation ("com.google.dagger:hilt-android-testing:2.38.1")
     // ...with Kotlin.
-    kaptTest ("com.google.dagger:hilt-android-compiler:2.38.1")
+    kaptTest ("com.google.dagger:hilt-android-compiler:2.40.5")
 
 
     // For instrumented tests.
     androidTestImplementation ("com.google.dagger:hilt-android-testing:2.38.1")
     // ...with Kotlin.
-    kaptAndroidTest ("com.google.dagger:hilt-android-compiler:2.38.1")
+    kaptAndroidTest ("com.google.dagger:hilt-android-compiler:2.40.5")
     // ...with Java.
-    androidTestAnnotationProcessor ("com.google.dagger:hilt-android-compiler:2.38.1")
+    androidTestAnnotationProcessor ("com.google.dagger:hilt-android-compiler:2.40.5")
 
 }
 

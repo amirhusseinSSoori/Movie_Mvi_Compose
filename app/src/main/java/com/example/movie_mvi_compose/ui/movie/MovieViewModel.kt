@@ -7,9 +7,10 @@ import com.dropbox.android.external.store4.StoreResponse
 import com.example.movie_mvi_compose.data.db.entity.MovieEntity
 import com.example.movie_mvi_compose.data.mapper.MoviesMapper
 import com.example.movie_mvi_compose.data.network.response.MovieItem
-import com.example.movie_mvi_compose.data.repository.movie.DispatcherProvider
+
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieViewModel @Inject constructor(
     private val repository: MovieRepository,
-    private val dispatcher: DispatcherProvider,
     private val mapper: MoviesMapper,
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class MovieViewModel @Inject constructor(
 
     private suspend fun getLatestMovie() {
         repository.getStore().stream(StoreRequest.cached(key = "item", refresh = true))
-            .flowOn(dispatcher.io())
+            .flowOn(Dispatchers.IO)
             .collect { response: StoreResponse<List<MovieEntity>> ->
                 when (response) {
                     is StoreResponse.Loading -> {

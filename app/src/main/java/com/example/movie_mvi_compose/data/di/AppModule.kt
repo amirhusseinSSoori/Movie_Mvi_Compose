@@ -8,8 +8,7 @@ import com.example.movie_mvi_compose.data.db.dao.MovieDao
 import com.example.movie_mvi_compose.data.network.Api.MovieClient
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepository
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepositoryImp
-import com.example.movie_mvi_compose.data.repository.movie.DispatcherProvider
-import com.example.movie_mvi_compose.data.repository.movie.DispatcherProviderImpl
+
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryImp
 import com.example.movie_mvi_compose.data.source.LocalSource
@@ -66,8 +65,7 @@ object AppModule {
 
     }
 
-    @Provides
-    fun provideDispatcherProvider(): DispatcherProvider = DispatcherProviderImpl()
+
 
     @Provides
     fun provideMovieApi(retrofit: Retrofit): MovieClient {

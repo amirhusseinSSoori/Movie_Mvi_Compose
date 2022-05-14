@@ -16,8 +16,8 @@ class MovieRepositoryImp (
     private val network: RemoteSource,
     private val local: LocalSource,
     ) : MovieRepository {
-    @ExperimentalCoroutinesApi
-    @FlowPreview
+
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override fun getStore(): Store<String, List<MovieEntity>> = StoreBuilder.from(
         fetcher = Fetcher.of { _: String ->
             network.remoteAllMovies()
@@ -38,9 +38,4 @@ class MovieRepositoryImp (
 
 
 
-interface DispatcherProvider {
-    fun main(): CoroutineDispatcher = Dispatchers.Main
-    fun default(): CoroutineDispatcher = Dispatchers.Default
-    fun io(): CoroutineDispatcher = Dispatchers.IO
-}
-class DispatcherProviderImpl : DispatcherProvider
+

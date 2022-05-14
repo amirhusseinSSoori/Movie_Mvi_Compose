@@ -6,8 +6,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
@@ -71,8 +72,8 @@ fun BtnRetry(UiUpdatePoorConnection: MovieViewModel, error: Boolean) {
 }
 
 
-@ExperimentalAnimationApi
-@ExperimentalFoundationApi
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: MovieViewModel) {
     val data by viewModel._movieState.collectAsState()
@@ -84,7 +85,7 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
         data.let {
             Loading(visible = it.loading)
             val items = it.details
-            LazyVerticalGrid(cells = GridCells.Fixed(2)) {
+            LazyVerticalGrid(GridCells.Fixed(2)) {
                 items(items!!.size) { data ->
                     val (id, poster) = items!![data]
                     MovieRowItem(

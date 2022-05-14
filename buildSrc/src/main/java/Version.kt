@@ -1,11 +1,11 @@
 object Version {
 
     //----------------- main --------------------------------
-    val kotlin_version = "1.5.31"
-    val gradle_Version="7.0.3"
+    val kotlin_version = "1.6.10"
+    val gradle_Version="7.2.0"
     val core_ktx_version = "1.7.0"
-    val appcompat_version = "1.3.1"
-    val material_version = "1.4.0"
+    val appcompat_version = "1.4.1"
+    val material_version = "1.5.0"
     val experso_version="3.4.0"
     val junit_version="1.1.3"
 
@@ -14,9 +14,9 @@ object Version {
 
 
     //---------------------- compose ---------------------------------
-    val compose_version= "1.0.5"
-    val constraintlayout_compose_version ="1.0.0-alpha08"
-    val activity_compose_version="1.3.0-rc02"
+    val compose_version= "1.1.1"
+    val constraintlayout_compose_version ="1.0.0"
+    val activity_compose_version="1.4.0"
 
 
     //---------------------- square ----------------------------------
@@ -24,7 +24,7 @@ object Version {
     val okhttp3_version="5.0.0-alpha.2"
 
     //------------------------ hilt -------------------------------
-    val hilt_version ="2.38.1"
+    val hilt_version ="2.40.5"
     var hilt_lifecycle_version ="1.0.0-alpha03"
     val hilt_compiler_version ="1.0.0"
 
@@ -33,10 +33,10 @@ object Version {
     val lifecycle_version="2.4.0"
 
     // ------------------------ room ---------------------------------------
-    val room ="2.4.0-alpha04"
+    val room ="2.4.2"
 
     //------------------------------- coroutines  -------------------------------------
-    val coroutines="1.5.2"
+    val coroutines="1.6.0"
     //---------------------------------------- coil------------------------------------
     val coil ="0.12.0"
     val coil_landscapist="1.2.4"
@@ -45,8 +45,8 @@ object Version {
 
 
     //----------------------------------------- Navigation -------------------------------------------
-    val navigation="0.16.0"
-    val navigation_compose="2.4.0-alpha06"
+    val navigation_accompanist="0.24.6-alpha"
+    val navigation_hilt_compose="1.0.0"
 
 
 

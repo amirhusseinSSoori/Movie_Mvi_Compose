@@ -1,19 +1,15 @@
 package com.example.movie_mvi_compose.ui.Navigation
 
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.*
-import androidx.navigation.compose.*
-import coil.ImageLoader
-
-import com.example.movie_mvi_compose.ui.details.DetailsContract
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import com.example.movie_mvi_compose.ui.details.DetailsMovie
 import com.example.movie_mvi_compose.ui.details.DetailsViewModel
 import com.example.movie_mvi_compose.ui.intro.Splash
@@ -21,38 +17,37 @@ import com.example.movie_mvi_compose.ui.movie.MovieLazyList
 import com.example.movie_mvi_compose.ui.movie.MovieViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
 fun InitialNavGraph(navController: NavHostController) {
-    AnimatedNavHost(navController = navController, startDestination = Screen.Intro.route) {
-        addIntro(navController)
+    AnimatedNavHost(navController = navController, startDestination = ScreenRoute.MovieRoute.route) {
+//        addIntro(navController)
         addMovieList(navController)
         addMovieDetail()
 
     }
 }
 
-@ExperimentalAnimationApi
+
+@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addIntro(navController: NavController) {
-    composable(Screen.Intro.route,
-        enterTransition = { initial, _ ->
-            when (initial.destination.route) {
-                Screen.MovieRoute.route ->
-                    slideInHorizontally(
-                        initialOffsetX = { 300 },
-                        animationSpec = tween(300)
-                    ) + fadeIn(animationSpec = tween(300))
-                else -> null
-            }
-        },
-        exitTransition = { _, target ->
-            when (target.destination.route) {
-                Screen.MovieRoute.route ->
+    composable(
+        ScreenRoute.Intro.route,
+        enterTransition = { when (initialState.destination.route) {
+            ScreenRoute.MovieRoute.route ->
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(700)
+                )
+            else -> null
+        }},
+        exitTransition = {
+            when (initialState.destination.route) {
+                ScreenRoute.MovieRoute.route ->
                     slideOutHorizontally(
                         targetOffsetX = { 300 },
                         animationSpec = tween(300)
@@ -60,9 +55,9 @@ fun NavGraphBuilder.addIntro(navController: NavController) {
                 else -> null
             }
         },
-        popEnterTransition = { initial, _ ->
-            when (initial.destination.route) {
-                Screen.MovieRoute.route ->
+        popEnterTransition = {
+            when (initialState.destination.route) {
+                ScreenRoute.MovieRoute.route ->
                     slideInHorizontally(
                         initialOffsetX = { 300 },
                         animationSpec = tween(300)
@@ -71,7 +66,6 @@ fun NavGraphBuilder.addIntro(navController: NavController) {
             }
         }) {
         Splash(navController)
-
     }
 }
 
@@ -79,9 +73,9 @@ fun NavGraphBuilder.addIntro(navController: NavController) {
 fun NavGraphBuilder.addMovieDetail(
 ) {
     composable(
-        route = Screen.DetailsRoute.route + "/{details}",
-        arguments = Screen.DetailsRoute.arguments,
-        enterTransition = { _, _ ->
+        route = ScreenRoute.DetailsRoute.route + "/{details}",
+        arguments = ScreenRoute.DetailsRoute.arguments,
+        enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { -300 },
                 animationSpec = tween(
@@ -90,7 +84,7 @@ fun NavGraphBuilder.addMovieDetail(
                 )
             ) + fadeIn(animationSpec = tween(300))
         },
-        popExitTransition = { _, target ->
+        popExitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { -300 },
                 animationSpec = tween(
@@ -106,15 +100,14 @@ fun NavGraphBuilder.addMovieDetail(
     }
 }
 
-@ExperimentalFoundationApi
-@ExperimentalComposeUiApi
-@ExperimentalAnimationApi
+
+@OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
 fun NavGraphBuilder.addMovieList(
     navController: NavController
 ) {
     composable(
-        route = Screen.MovieRoute.route,
-        exitTransition = { _, _ ->
+        route = ScreenRoute.MovieRoute.route,
+        exitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { 300 },
                 animationSpec = tween(
@@ -123,7 +116,7 @@ fun NavGraphBuilder.addMovieList(
                 )
             ) + fadeOut(animationSpec = tween(300))
         },
-        popEnterTransition = { initial, _ ->
+        popEnterTransition = {
             slideInHorizontally(
                 initialOffsetX = { 300 },
                 animationSpec = tween(
@@ -135,23 +128,9 @@ fun NavGraphBuilder.addMovieList(
     ) {
         val viewModel: MovieViewModel = hiltViewModel()
         MovieLazyList(navigateToDetailsScreen = {
-            navController.navigate("${Screen.DetailsRoute.route}/$it"){}
+            navController.navigate("${ScreenRoute.DetailsRoute.route}/$it") {}
         }, viewModel)
     }
 }
 
-sealed class Screen(val route: String, val arguments: List<NamedNavArgument>) {
-    object MovieRoute : Screen(
-        route = "ScreenMovie",
-        arguments = emptyList()
-    )
-
-    object Intro : Screen("ScreenIntro", arguments = emptyList())
-    object DetailsRoute : Screen(
-        route = "ScreenDetails",
-        arguments = listOf(navArgument("details") {
-            type = NavType.IntType
-        })
-    )
-}
 

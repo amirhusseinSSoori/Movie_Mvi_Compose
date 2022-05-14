@@ -1,11 +1,22 @@
 package com.example.movie_mvi_compose.data.source
 
-import com.example.movie_mvi_compose.data.db.dao.MovieDao
-import com.example.movie_mvi_compose.data.mapper.MoviesMapper
+import com.comexample.moviemvicompose.MovieEntityQueries
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class LocalSource @Inject constructor(val db: MovieDao, val mapper: MoviesMapper) {
-    fun allMovies() = db.getAllMovie()
-    suspend fun updateAllMovies(movies: MovieResponse) = db.update(mapper.mapFromEntityList(movies))
+class LocalSource @Inject constructor(
+    val movieEntityQueries: MovieEntityQueries,
+) {
+    fun allMovies() = movieEntityQueries.selectAll().asFlow().map { to ->
+        to.executeAsList()
+    }
+
+    fun updateAllMovies(movies: MovieResponse) {
+        movieEntityQueries.delete()
+        movies.forEach {n->
+            movieEntityQueries.insert(idMovie = n.id ?: "", poster = n.poster ?: "")
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.movie_mvi_compose.ui.movie
 
-import com.example.movie_mvi_compose.data.db.entity.MovieEntity
+
+import com.comexample.moviemvicompose.MovieEntity
 import com.example.movie_mvi_compose.data.network.response.MovieItem
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import com.example.movie_mvi_compose.ui.base.*
@@ -28,6 +29,7 @@ class MovieContract {
 
     sealed class Effect : UiEffect {
         object Empty : MovieState()
-        data class ShowError(val message:String,var list: List<MovieEntity>) : Effect()
+        data class ShowError(val message:String,var list: List<
+                MovieEntity>) : Effect()
     }
 }

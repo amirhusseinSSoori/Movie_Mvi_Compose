@@ -1,11 +1,11 @@
 package com.example.movie_mvi_compose.ui.movie
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.comexample.moviemvicompose.MovieEntity
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
-import com.example.movie_mvi_compose.data.db.entity.MovieEntity
-import com.example.movie_mvi_compose.data.mapper.MoviesMapper
 import com.example.movie_mvi_compose.data.network.response.MovieItem
 
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
@@ -18,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(
-    private val repository: MovieRepository,
-    private val mapper: MoviesMapper,
+    private val repository: MovieRepository
 ) : ViewModel() {
 
     val movieState = MutableStateFlow(StateMovie())
@@ -37,7 +36,7 @@ class MovieViewModel @Inject constructor(
             .collect { response: StoreResponse<List<MovieEntity>> ->
                 when (response) {
                     is StoreResponse.Loading -> {
-                        movieState.value = movieState.value.copy(loading = true)
+                        movieState.value = movieState.value.copy(loading = false)
                     }
                     is StoreResponse.Error -> {
                         movieState.value = movieState.value.copy(message = "error Connection")
@@ -45,7 +44,8 @@ class MovieViewModel @Inject constructor(
                     is StoreResponse.Data -> {
                         movieState.value = movieState.value.copy(loading = false)
                         movieState.value =
-                            movieState.value.copy(details = mapper.mapToEntityList(response.value))
+                            movieState.value.copy(details = mapToEntityList(response.value))
+                        Log.e("getLatestMovie", "getLatestMovie: ${response.value}", )
                     }
                     else -> Unit
                 }
@@ -58,5 +58,16 @@ class MovieViewModel @Inject constructor(
         var message: String = " ",
         var details: List<MovieItem>? = emptyList(),
     )
+     fun mapToEntityList(domains: List<MovieEntity>): List<MovieItem> {
+        return domains.map { mapToEntity(it) }
+    }
 
+
+
+    fun mapToEntity(domainModel: MovieEntity): MovieItem {
+        return MovieItem(
+            id = domainModel.idMovie,
+            poster = domainModel.poster,
+        )
+    }
 }

@@ -9,6 +9,7 @@ object Main {
     val gradle="com.android.tools.build:gradle:${Version.gradle_Version}"
     var kotlin="org.jetbrains.kotlin:kotlin-gradle-plugin:${Version.kotlin_version}"
     val hilt="com.google.dagger:hilt-android-gradle-plugin:${Version.hilt_version}"
+    val sqldelight = ("com.squareup.sqldelight:gradle-plugin:${Version.sqlDelight}")
 
 
 

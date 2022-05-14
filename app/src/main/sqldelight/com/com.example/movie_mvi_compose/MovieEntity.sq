@@ -1,0 +1,51 @@
+CREATE TABLE MovieEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    idMovie TEXT NOT NULL,
+    poster TEXT NOT NULL
+
+
+);
+
+insert:
+INSERT INTO MovieEntity(idMovie,poster)
+VALUES
+( ?, ?);
+
+
+selectAll:
+SELECT *
+FROM MovieEntity;
+
+
+-- selectById:
+-- SELECT *
+-- FROM ToDoEntity
+-- WHERE id = ?;
+
+-- selectFilteredByName:
+-- SELECT *
+-- FROM ToDoEntity
+-- WHERE (completed != :hideCompleted OR completed = 0)
+-- AND name LIKE '%' || :nameQuery || '%'
+-- ORDER BY important DESC, name;
+
+-- selectFilteredByDate:
+-- SELECT *
+-- FROM ToDoEntity
+-- WHERE (completed != :hideCompleted OR completed = 0)
+-- AND name LIKE '%' || :nameQuery || '%'
+-- ORDER BY important DESC, created DESC;
+
+-- insertOrReplace:
+-- INSERT OR REPLACE INTO ToDoEntity(
+--     id,
+--     name,
+--     important,
+--     completed,
+--     created
+-- )
+-- VALUES (?, ?, ?, ?, ?);
+
+delete:
+DELETE
+FROM MovieEntity;

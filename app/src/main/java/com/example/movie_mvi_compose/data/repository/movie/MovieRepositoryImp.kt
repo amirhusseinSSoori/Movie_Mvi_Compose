@@ -1,16 +1,16 @@
 package com.example.movie_mvi_compose.data.repository.movie
 
-import com.dropbox.android.external.store4.*
-import com.example.movie_mvi_compose.data.db.entity.MovieEntity
+import android.util.Log
+import com.comexample.moviemvicompose.MovieEntity
+import com.dropbox.android.external.store4.Fetcher
+import com.dropbox.android.external.store4.SourceOfTruth
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreBuilder
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import com.example.movie_mvi_compose.data.source.LocalSource
 import com.example.movie_mvi_compose.data.source.RemoteSource
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import retrofit2.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 class MovieRepositoryImp (
     private val network: RemoteSource,
@@ -23,7 +23,9 @@ class MovieRepositoryImp (
             network.remoteAllMovies()
         },
         sourceOfTruth = SourceOfTruth.Companion.of(
-            reader = { local.allMovies() },
+            reader = {
+                local.allMovies()
+                },
             writer = { _, input: MovieResponse ->
                 local.updateAllMovies(input)
             }

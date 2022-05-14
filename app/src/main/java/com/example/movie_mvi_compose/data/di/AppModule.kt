@@ -1,23 +1,22 @@
 package com.example.movie_mvi_compose.data.di
 
+import android.app.Application
 import android.content.Context
-import androidx.room.Room
+import com.comexample.moviemvicompose.MovieEntityQueries
 import com.example.movie_mvi_compose.BuildConfig.DEBUG
-import com.example.movie_mvi_compose.data.db.MyDataBase
-import com.example.movie_mvi_compose.data.db.dao.MovieDao
+import com.example.movie_mvi_compose.Database
 import com.example.movie_mvi_compose.data.network.Api.MovieClient
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepository
 import com.example.movie_mvi_compose.data.repository.details.DetailsRepositoryImp
-
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepository
 import com.example.movie_mvi_compose.data.repository.movie.MovieRepositoryImp
 import com.example.movie_mvi_compose.data.source.LocalSource
 import com.example.movie_mvi_compose.data.source.RemoteSource
 import com.google.gson.GsonBuilder
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -72,34 +71,30 @@ object AppModule {
         return retrofit.create(MovieClient::class.java)
     }
 
-
+    @Provides
     @Singleton
-    @Provides
-    fun provideMyDb(
-        @ApplicationContext context: Context,
-    ): MyDataBase {
-        return Room
-            .databaseBuilder(
-                context,
-                MyDataBase::class.java,
-                "DATABASE_NAME"
-            )
-            .fallbackToDestructiveMigration()
-            .build()
-    }
+    fun provideDatabase(
+        app: Application
+    ): Database = app.applicationContext.createDatabaseDriver()
+        .run {
+            Database(this)
+        }
 
 
     @Provides
-    fun provideMyDAO(myDataBase: MyDataBase): MovieDao {
-        return myDataBase.getMyDao()
-    }
+    @Singleton
+    fun provideMoviesQueries(
+        db: Database
+    ): MovieEntityQueries = db.movieEntityQueries
+
+
 
     @Provides
     fun provideMovieRepository(
         network: RemoteSource,
-        local: LocalSource,
+        localSource: LocalSource,
     ): MovieRepository {
-        return MovieRepositoryImp(network, local)
+        return MovieRepositoryImp(network, localSource)
     }
 
     @Provides
@@ -109,3 +104,9 @@ object AppModule {
 
 
 }
+
+fun Context.createDatabaseDriver() = AndroidSqliteDriver(
+    schema = Database.Schema,
+    context = this,
+    name = "DATABASE_NAME",
+)

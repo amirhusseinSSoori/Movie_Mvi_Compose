@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
+    id ("com.squareup.sqldelight")
 }
 
 android {
@@ -95,10 +96,9 @@ dependencies {
         implementation(livedata)
     }
 
-    dep.Room.apply {
-        implementation(runtime)
-        kapt(compiler)
-        implementation(ktx)
+    dep.SqlDelight.apply {
+        implementation(driver)
+        implementation(coroutines)
     }
     dep.KotlinX.apply {
         implementation(core)

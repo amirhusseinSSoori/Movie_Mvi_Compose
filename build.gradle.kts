@@ -11,6 +11,7 @@ buildscript {
             classpath (gradle)
             classpath (kotlin)
             classpath (hilt)
+            classpath (sqldelight)
         }
 
 

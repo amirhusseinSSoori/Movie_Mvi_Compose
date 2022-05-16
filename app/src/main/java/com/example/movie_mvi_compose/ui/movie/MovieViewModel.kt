@@ -36,10 +36,11 @@ class MovieViewModel @Inject constructor(
             .collect { response: StoreResponse<List<MovieEntity>> ->
                 when (response) {
                     is StoreResponse.Loading -> {
-                        movieState.value = movieState.value.copy(loading = false)
+                        movieState.value = movieState.value.copy(loading = true)
                     }
                     is StoreResponse.Error -> {
                         movieState.value = movieState.value.copy(message = "error Connection")
+                        movieState.value = movieState.value.copy(loading = false)
                     }
                     is StoreResponse.Data -> {
                         movieState.value = movieState.value.copy(loading = false)
@@ -54,7 +55,7 @@ class MovieViewModel @Inject constructor(
 
 
     data class StateMovie(
-        var loading: Boolean = false,
+        var loading: Boolean = true,
         var message: String = " ",
         var details: List<MovieItem>? = emptyList(),
     )

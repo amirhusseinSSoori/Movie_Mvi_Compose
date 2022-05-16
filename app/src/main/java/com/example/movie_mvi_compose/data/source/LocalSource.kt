@@ -3,6 +3,7 @@ package com.example.movie_mvi_compose.data.source
 import com.comexample.moviemvicompose.MovieEntityQueries
 import com.example.movie_mvi_compose.data.network.response.MovieResponse
 import com.squareup.sqldelight.runtime.coroutines.asFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

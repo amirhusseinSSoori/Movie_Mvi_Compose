@@ -84,8 +84,7 @@ fun MovieLazyList(navigateToDetailsScreen: (id: String) -> Unit, viewModel: Movi
             .fillMaxSize()
     ) {
         data.let {
-            Log.e("MovieLazyList", "MovieLazyList:$data ", )
-          //  Loading(visible = it.loading)
+           Loading(visible = it.loading)
             val items = it.details
             LazyVerticalGrid(GridCells.Fixed(2)) {
                 items(items!!.size) { data ->

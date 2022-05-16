@@ -46,7 +46,6 @@ class MovieViewModel @Inject constructor(
                         movieState.value = movieState.value.copy(loading = false)
                         movieState.value =
                             movieState.value.copy(details = mapToEntityList(response.value))
-                        Log.e("getLatestMovie", "getLatestMovie: ${response.value}", )
                     }
                     else -> Unit
                 }

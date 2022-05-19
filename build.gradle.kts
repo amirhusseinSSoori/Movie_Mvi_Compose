@@ -8,14 +8,14 @@ buildscript {
     dependencies {
 
         dep.Main.apply {
-            classpath (gradle)
-            classpath (kotlin)
-            classpath (hilt)
-            classpath (sqldelight)
+            classpath(gradle)
+            classpath(kotlin)
+            classpath(hilt)
+            classpath(sqldelight)
+            classpath("org.jetbrains.kotlin:kotlin-serialization:1.6.21")
+
+
         }
-
-
-
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

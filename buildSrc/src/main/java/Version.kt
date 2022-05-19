@@ -1,7 +1,7 @@
 object Version {
 
     //----------------- main --------------------------------
-    val kotlin_version = "1.6.10"
+    val kotlin_version = "1.6.21"
     val gradle_Version="7.2.0"
     val core_ktx_version = "1.7.0"
     val appcompat_version = "1.4.1"
@@ -14,7 +14,7 @@ object Version {
 
 
     //---------------------- compose ---------------------------------
-    val compose_version= "1.1.1"
+    val compose_version= "1.2.0-beta01"
     val constraintlayout_compose_version ="1.0.0"
     val activity_compose_version="1.4.0"
 

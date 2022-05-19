@@ -4,6 +4,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     id ("com.squareup.sqldelight")
+    id ("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -48,10 +49,11 @@ android {
     packagingOptions {
         resources {
             excludes += ("/META-INF/{AL2.0,LGPL2.1}")
+            excludes +=("/META-INF/DEPENDENCIES")
         }
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = ("1.1.1")
+        kotlinCompilerExtensionVersion = ("1.2.0-beta01")
     }
 
 
@@ -116,6 +118,15 @@ dependencies {
         implementation(navigation_accompanist)
         implementation(navigation_hilt_compose)
     }
+
+
+    implementation ("io.ktor:ktor-client-core:2.0.0")
+    implementation ("io.ktor:ktor-client-android:2.0.0")
+    implementation ("io.ktor:ktor-client-serialization:2.0.0")
+    implementation ("io.ktor:ktor-client-logging:2.0.0")
+    implementation("io.ktor:ktor-client-apache:2.0.0")
+    implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.0")
     // unit test
     implementation ("com.dropbox.mobile.store:store4:4.0.5")
     testImplementation ("androidx.test:core:1.4.0")
